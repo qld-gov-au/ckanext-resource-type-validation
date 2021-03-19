@@ -1,0 +1,44 @@
+{
+    "allowed_extensions": [
+        "accdb", "asc", "cdf", "csv", "doc", "docx", "ecw", "esri",
+        "fgdb", "gdb", "geojson", "geotiff", "gpkg", "gpx", "html",
+        "jp2", "jpeg", "jpg", "json", "kml", "kmz", "mdb", "mtl", "n3",
+        "nc", "obj", "pdf", "png", "ppt", "pptx", "rdf", "rtf", "shp",
+        "sparql", "tab", "tif", "tiff", "topojson", "tsv", "ttf", "txt",
+        "wfs", "wmts", "xls", "xlsx", "xml", "zip"
+    ],
+    "allowed_overrides": {
+        "application/octet-stream": ["*"],
+        "text/plain": [
+            "application/sparql-query",
+            "application/x-ascii-grid",
+            "application/xml",
+            "text/*"
+        ],
+        "application/zip": ["application/vnd.google-earth.kmz"]
+    },
+    "archive_types": ["application/zip", "application/x-tar"],
+    "extra_mimetypes": {
+        ".accdb": "application/msaccess",
+        ".asc": "application/x-ascii-grid",
+        ".ecw": "application/x-ecw",
+        ".esri": "x-gis/x-shapefile",
+        ".fgdb": "application/x-filegdb",
+        ".gdb": "application/x-filegdb",
+        ".geojson": "application/json",
+        ".geotiff": "image/tiff",
+        ".gpkg": "application/x-sqlite3",
+        ".gpx": "application/xml",
+        ".kmz": "application/vnd.google-earth.kmz",
+        ".mtl": "model/mtl",
+        ".n3": "text/n3",
+        ".rdf": "text/xml",
+        ".shp": "x-gis/x-shapefile",
+        ".sparql": "application/sparql-query",
+        ".tab": "text/plain",
+        ".topojson": "application/json",
+        ".ttf": "text/plain",
+        ".wfs": "application/xml",
+        ".wmts": "application/xml"
+    }
+}
