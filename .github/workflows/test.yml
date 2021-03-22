@@ -39,5 +39,5 @@ jobs:
 
     - name: Run all tests
       run: |
-        python ckanext/resource_type_validation/test_mime_type_validation.py
+        python3 ckanext/resource_type_validation/test_mime_type_validation.py
 
