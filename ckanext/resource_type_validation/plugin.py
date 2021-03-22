@@ -2,7 +2,7 @@
 
 from ckan import plugins
 
-import resource_type_validation
+from resource_type_validation import ResourceTypeValidator
 
 
 class ResourceTypeValidationPlugin(plugins.SingletonPlugin):
@@ -10,16 +10,21 @@ class ResourceTypeValidationPlugin(plugins.SingletonPlugin):
     Filename, file contents, and specified format must resolve to
     compatible types.
     """
+    plugins.implements(plugins.IConfigurable, inherit=True)
     plugins.implements(plugins.IResourceController, inherit=True)
+
+    def configure(self, config):
+        self.validator = ResourceTypeValidator()
+        self.validator.configure(config)
 
     # IResourceController
 
     def before_create(self, context, data_dict):
         """ Check that uploads have an acceptable mime type.
         """
-        resource_type_validation.validate_resource_mimetype(data_dict)
+        self.validator.validate_resource_mimetype(data_dict)
 
     def before_update(self, context, existing_resource, data_dict):
         """ Check that uploads have an acceptable mime type.
         """
-        resource_type_validation.validate_resource_mimetype(data_dict)
+        self.validator.validate_resource_mimetype(data_dict)
