@@ -60,6 +60,7 @@ class ResourceTypeValidator:
             )
 
         self.allowed_overrides = file_mime_config.get('allowed_overrides', {})
+        self.equal_types = file_mime_config.get('equal_types', [])
         self.archive_mimetypes = file_mime_config.get('archive_types', [])
         self.generic_mimetypes = self.allowed_overrides.keys()
         error_contact = config.get(
@@ -128,7 +129,7 @@ class ResourceTypeValidator:
         # Archives can declare any format, but only if they're well formed
         if any(type in self.archive_mimetypes
                for type in (filename_mimetype, sniffed_mimetype)):
-            if filename_mimetype == sniffed_mimetype\
+            if self.type_equals(filename_mimetype, sniffed_mimetype)\
                     or self.is_valid_override(
                         filename_mimetype,
                         sniffed_mimetype):
@@ -178,7 +179,7 @@ class ResourceTypeValidator:
         """
         best_candidate = None
         for mime_type in mime_types:
-            if not mime_type or mime_type == best_candidate:
+            if not mime_type or self.type_equals(mime_type, best_candidate):
                 continue
             if not best_candidate:
                 best_candidate = mime_type
@@ -199,13 +200,26 @@ class ResourceTypeValidator:
 
         return best_candidate or 'application/octet-stream'
 
+    def type_equals(self, type1, type2):
+        """ Checks whether type1 and type2 are to be considered the same
+        eg 'text/xml' and 'application/xml' are interchangeable.
+        """
+        if type1 == type2:
+            return True
+        for type_list in self.equal_types:
+            if type1 in type_list and type2 in type_list:
+                return True
+        else:
+            return False
+
     def is_valid_override(self, mime_type1, mime_type2):
         """ Returns True if one of the two types can be considered a subtype
         of the other, eg 'text/csv' can override 'text/plain'.
         """
         def matches_override_list(mime_type, override_list):
             for override_type in override_list:
-                if override_type == '*' or override_type == mime_type:
+                if override_type == '*'\
+                        or self.type_equals(override_type, mime_type):
                     return True
                 override_parts = override_type.split('/', 1)
                 if len(override_parts) == 2 and override_parts[1] == '*'\
@@ -217,9 +231,9 @@ class ResourceTypeValidator:
         for generic_type, override_list in six.iteritems(
                 self.allowed_overrides
         ):
-            if generic_type == mime_type1\
+            if self.type_equals(generic_type, mime_type1)\
                 and matches_override_list(mime_type2, override_list)\
-                or generic_type == mime_type2\
+                or self.type_equals(generic_type, mime_type2)\
                     and matches_override_list(mime_type1, override_list):
                 return True
         else:
@@ -227,6 +241,7 @@ class ResourceTypeValidator:
 
     def is_mimetype_allowed(self, mime_type):
         for allowed_mime_type in self.allowed_mime_types:
-            if allowed_mime_type == '*' or allowed_mime_type == mime_type:
+            if allowed_mime_type == '*'\
+                    or self.type_equals(allowed_mime_type, mime_type):
                 return True
         return False

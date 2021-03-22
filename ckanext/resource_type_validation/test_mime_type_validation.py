@@ -34,6 +34,8 @@ coalesce_types = [
     ([None, application_type, generic_binary_type], application_type),
     ([None, 'x-gis/x-shapefile', generic_binary_type], 'x-gis/x-shapefile'),
     ([None, archive_type], archive_type),
+    (['text/xml', 'application/xml', generic_text_type], 'text/xml'),
+    ([generic_text_type, 'application/xml', 'text/xml'], 'application/xml'),
 ]
 
 sample_files = [
@@ -73,6 +75,18 @@ class TestMimeTypeValidation(unittest.TestCase):
     def setUp(self):
         self.validator = ResourceTypeValidator()
         self.validator.configure({})
+
+    def test_equal_types(self):
+        """ Test that equal types are treated as interchangeable.
+        """
+        self.assertTrue(self.validator.type_equals('application/xml',
+                                                   'text/xml'))
+        self.assertFalse(self.validator.type_equals('application/xml',
+                                                    'text/plain'))
+        self.assertEqual(self.validator.coalesce_mime_types(
+            ['text/xml', 'application/xml']), 'text/xml')
+        self.assertEqual(self.validator.coalesce_mime_types(
+            ['application/xml', 'text/xml']), 'application/xml')
 
     def test_coalesce_candidates(self):
         """ Test that missing candidates are gracefully ignored.
