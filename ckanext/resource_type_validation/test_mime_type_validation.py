@@ -46,6 +46,13 @@ sample_files = [
     ('example.kmz', 'KMZ', 'application/vnd.google-earth.kmz'),
     ('example.xml', 'XML', 'text/xml'),
     ('dummy.pdf', 'PDF', 'application/pdf'),
+    ('example.html', 'HTML', 'text/html'),
+    ('example.shp', 'SHP', 'x-gis/x-shapefile'),
+    ('example.txt', 'TXT', 'text/plain'),
+    ('example.wfs', 'WFS', 'application/xml'),
+    ('example.wmts', 'WMTS', 'application/xml'),
+    ('example.xlsx', 'XLSX',
+     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'),
     # well-formed archives can specify any format
     ('example.zip', 'ZIP', 'application/zip'),
     ('example.zip', 'PDF', 'application/pdf'),
