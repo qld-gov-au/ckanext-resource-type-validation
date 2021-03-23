@@ -1,0 +1,44 @@
+---
+#based on https://raw.githubusercontent.com/ckan/ckanext-scheming/master/.github/workflows/test.yml
+# alternative https://github.com/ckan/ckan/blob/master/contrib/cookiecutter/ckan_extension/%7B%7Bcookiecutter.project%7D%7D/.github/workflows/test.yml
+name: Tests
+on: [push]
+
+jobs:
+  lint:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install requirements
+        run: pip install flake8 pycodestyle
+      - name: Check syntax
+        run: flake8 . --count --show-source --statistics
+
+  test:
+    needs: lint
+    strategy:
+      matrix:
+        ckan-version: [2.9, 2.9-py2, 2.8]
+      fail-fast: true
+
+    name: CKAN ${{ matrix.ckan-version }}
+    runs-on: ubuntu-18.04
+    container:
+      image: openknowledge/ckan-dev:${{ matrix.ckan-version }}
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install requirements
+      run: |
+        pip install -r requirements.txt
+        pip install -e .
+
+    - name: Run all tests
+      run: |
+        PYTHON=`which python3 || which python`
+        $PYTHON ckanext/resource_type_validation/test_mime_type_validation.py
+

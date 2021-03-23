@@ -1,0 +1,19 @@
+{% ckan_extends %}
+
+{% import 'macros/form.html' as form %}
+
+{% block admin_form %}
+
+    {{ super() }}
+    {{ form.input('ckanext.resource_validation.support_contact', id='field-ckanext.resource_validation.support_contact', label=_('Support Contact'), placeholder=_('eg. webmaster@example.com') }}
+{% endblock %}
+
+
+{% block admin_form_help %}
+
+    {{ super() }}
+    <p>
+        <strong>Support Contact:</strong>
+        Directions for where to go or whom to contact in the event of errors with resource type validation.
+    </p>
+{% endblock %}
