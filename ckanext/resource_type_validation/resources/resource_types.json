@@ -25,7 +25,8 @@
         ]
     },
     "equal_types": [
-        ["text/xml", "application/xml", "application/rdf+xml"]
+        ["text/xml", "application/xml", "application/rdf+xml"],
+        ["text/xml", "application/xml", "application/vnd.google-earth.kml+xml"]
     ],
     "archive_types": ["application/zip", "application/x-tar"],
     "extra_mimetypes": {

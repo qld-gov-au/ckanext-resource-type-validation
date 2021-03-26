@@ -55,7 +55,7 @@ sample_files = [
      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'),
     ('example.doc', 'DOC', 'application/msword'),
     ('example.json', 'JSON', 'application/json'),
-#     ('example.kml', 'KML', 'application/vnd.google-earth.kml+xml'),
+    ('example.kml', 'KML', 'application/vnd.google-earth.kml+xml'),
     ('example.ppt', 'PPT', 'application/vnd.ms-powerpoint'),
     ('example.rdf', 'RDF', 'application/rdf+xml'),
     ('example.xls', 'XLS', 'application/vnd.ms-excel'),
