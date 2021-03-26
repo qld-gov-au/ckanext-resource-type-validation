@@ -15,6 +15,7 @@
             "application/xml",
             "application/json",
             "application/rdf+xml",
+            "application/vnd.google-earth.kml+xml",
             "text/*"
         ],
         "application/zip": ["application/vnd.google-earth.kmz"],
