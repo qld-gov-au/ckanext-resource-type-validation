@@ -18,6 +18,11 @@
             "text/*"
         ],
         "application/zip": ["application/vnd.google-earth.kmz"],
+        "application/CDFV2": [
+            "application/vnd.ms-excel",
+            "application/msword",
+            "application/vnd.ms-powerpoint"
+        ],
         "application/CDFV2-unknown": [
             "application/vnd.ms-excel",
             "application/msword",
