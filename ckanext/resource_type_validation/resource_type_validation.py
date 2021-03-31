@@ -12,7 +12,7 @@ import re
 import six
 
 from ckan.lib.uploader import ALLOWED_UPLOAD_TYPES
-import ckan.logic
+from ckan.logic import ValidationError
 from werkzeug.datastructures import FileStorage as FlaskFileStorage
 
 LOG = getLogger(__name__)
@@ -62,7 +62,8 @@ class ResourceTypeValidator:
         self.allowed_overrides = file_mime_config.get('allowed_overrides', {})
         self.equal_types = file_mime_config.get('equal_types', [])
         self.archive_mimetypes = file_mime_config.get('archive_types', [])
-        self.generic_mimetypes = self.allowed_overrides.keys()
+        self.generic_mimetypes = file_mime_config.get(
+            'generic_types', self.allowed_overrides.keys())
         error_contact = config.get(
             'ckanext.resource_validation.support_contact',
             'the site owner.'
@@ -109,7 +110,7 @@ class ResourceTypeValidator:
 
         if (self.allowed_extensions_pattern
                 and not self.allowed_extensions_pattern.search(filename)):
-            raise ckan.logic.ValidationError(
+            raise ValidationError(
                 {'upload': [self.invalid_upload_message]}
             )
 
@@ -132,12 +133,12 @@ class ResourceTypeValidator:
             if self.type_equals(filename_mimetype, sniffed_mimetype)\
                     or self.is_valid_override(
                         filename_mimetype,
-                        sniffed_mimetype):
+                        sniffed_mimetype)[0]:
                 # well-formed archives can specify any format they want
                 sniffed_mimetype = filename_mimetype = claimed_mimetype =\
                     format_mimetype or claimed_mimetype or filename_mimetype
             else:
-                raise ckan.logic.ValidationError(
+                raise ValidationError(
                     {'upload': [
                         self.mismatching_upload_message.format(
                             filename_mimetype,
@@ -159,7 +160,7 @@ class ResourceTypeValidator:
         )
         LOG.debug("Best guess at MIME type is %s", best_guess_mimetype)
         if not self.is_mimetype_allowed(best_guess_mimetype):
-            raise ckan.logic.ValidationError(
+            raise ValidationError(
                 {'upload': [self.invalid_upload_message]}
             )
 
@@ -184,14 +185,13 @@ class ResourceTypeValidator:
             if not best_candidate:
                 best_candidate = mime_type
                 continue
-            if allow_override \
-                    and self.is_valid_override(best_candidate, mime_type):
-                if best_candidate in self.generic_mimetypes:
-                    best_candidate = mime_type
+            if allow_override:
+                is_valid, subtype = self.is_valid_override(
+                    best_candidate, mime_type)
+                if is_valid:
+                    best_candidate = subtype
                     continue
-                if mime_type in self.generic_mimetypes:
-                    continue
-            raise ckan.logic.ValidationError(
+            raise ValidationError(
                 {'upload': [
                     self.mismatching_upload_message.format(
                         best_candidate, mime_type)
@@ -215,6 +215,9 @@ class ResourceTypeValidator:
     def is_valid_override(self, mime_type1, mime_type2):
         """ Returns True if one of the two types can be considered a subtype
         of the other, eg 'text/csv' can override 'text/plain'.
+
+        If True, then the second return value is the more specific type,
+        otherwise it is None.
         """
         def matches_override_list(mime_type, override_list):
             for override_type in override_list:
@@ -232,12 +235,13 @@ class ResourceTypeValidator:
                 self.allowed_overrides
         ):
             if self.type_equals(generic_type, mime_type1)\
-                and matches_override_list(mime_type2, override_list)\
-                or self.type_equals(generic_type, mime_type2)\
+                    and matches_override_list(mime_type2, override_list):
+                return True, mime_type2
+            if self.type_equals(generic_type, mime_type2)\
                     and matches_override_list(mime_type1, override_list):
-                return True
+                return True, mime_type1
         else:
-            return False
+            return False, None
 
     def is_mimetype_allowed(self, mime_type):
         for allowed_mime_type in self.allowed_mime_types:
