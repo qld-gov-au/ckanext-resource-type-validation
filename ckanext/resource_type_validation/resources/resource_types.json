@@ -13,8 +13,14 @@
             "application/sparql-query",
             "application/x-ascii-grid",
             "application/xml",
+            "application/json",
             "application/rdf+xml",
+            "application/vnd.google-earth.kml+xml",
             "text/*"
+        ],
+        "application/xml": [
+            "application/rdf+xml",
+            "application/vnd.google-earth.kml+xml"
         ],
         "application/zip": ["application/vnd.google-earth.kmz"],
         "application/CDFV2": [
@@ -24,8 +30,10 @@
         ]
     },
     "equal_types": [
-        ["text/xml", "application/xml", "application/rdf+xml"]
+        ["text/xml", "application/xml"],
+        ["application/CDFV2", "application/CDFV2-unknown"]
     ],
+    "generic_types": ["application/octet-stream", "text/plain"],
     "archive_types": ["application/zip", "application/x-tar"],
     "extra_mimetypes": {
         ".accdb": "application/msaccess",
@@ -38,9 +46,11 @@
         ".geotiff": "image/tiff",
         ".gpkg": "application/x-sqlite3",
         ".gpx": "application/xml",
+        ".kml": "application/vnd.google-earth.kml+xml",
         ".kmz": "application/vnd.google-earth.kmz",
         ".mtl": "model/mtl",
         ".n3": "text/n3",
+        ".rdf": "application/rdf+xml",
         ".shp": "x-gis/x-shapefile",
         ".sparql": "application/sparql-query",
         ".tab": "text/plain",

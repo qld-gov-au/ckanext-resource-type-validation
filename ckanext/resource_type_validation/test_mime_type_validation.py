@@ -53,6 +53,12 @@ sample_files = [
     ('example.wmts', 'WMTS', 'application/xml'),
     ('example.xlsx', 'XLSX',
      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'),
+    ('example.doc', 'DOC', 'application/msword'),
+    ('example.json', 'JSON', 'application/json'),
+    ('example.kml', 'KML', 'application/vnd.google-earth.kml+xml'),
+    ('example.ppt', 'PPT', 'application/vnd.ms-powerpoint'),
+    ('example.rdf', 'RDF', 'application/rdf+xml'),
+    ('example.xls', 'XLS', 'application/vnd.ms-excel'),
     # well-formed archives can specify any format
     ('example.zip', 'ZIP', 'application/zip'),
     ('example.zip', 'PDF', 'application/pdf'),
