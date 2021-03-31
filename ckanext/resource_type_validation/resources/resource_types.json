@@ -50,6 +50,7 @@
         ".kmz": "application/vnd.google-earth.kmz",
         ".mtl": "model/mtl",
         ".n3": "text/n3",
+        ".rdf": "application/rdf+xml",
         ".shp": "x-gis/x-shapefile",
         ".sparql": "application/sparql-query",
         ".tab": "text/plain",
