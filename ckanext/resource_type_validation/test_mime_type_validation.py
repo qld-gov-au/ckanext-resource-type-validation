@@ -39,6 +39,8 @@ coalesce_types = [
 ]
 
 sample_files = [
+    ('ASampleDatabase.accdb', 'ACCDB',
+     ['application/msaccess', 'application/x-msaccess']),
     ('foo.csv', 'CSV', 'text/csv'),
     ('example.docx', 'DOCX',
      'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
@@ -56,6 +58,8 @@ sample_files = [
     ('example.doc', 'DOC', 'application/msword'),
     ('example.json', 'JSON', 'application/json'),
     ('example.kml', 'KML', 'application/vnd.google-earth.kml+xml'),
+    ('Assets3_Data.mdb', 'MDB',
+     ['application/msaccess', 'application/x-msaccess']),
     ('example.ppt', 'PPT', 'application/vnd.ms-powerpoint'),
     ('example.rdf', 'RDF', 'application/rdf+xml'),
     ('example.xls', 'XLS', 'application/vnd.ms-excel'),
@@ -144,7 +148,14 @@ class TestMimeTypeValidation(unittest.TestCase):
 
             try:
                 self.validator.validate_resource_mimetype(resource)
-                self.assertEqual(resource['mimetype'], expected_type)
+                error_msg = '{} has an unexpected MIME type {}'.format(
+                    filename, resource['mimetype'])
+                if isinstance(expected_type, list):
+                    assert_function = self.assertIn
+                else:
+                    assert_function = self.assertEqual
+                assert_function(
+                    resource['mimetype'], expected_type, error_msg)
             finally:
                 sample_file.close()
 
