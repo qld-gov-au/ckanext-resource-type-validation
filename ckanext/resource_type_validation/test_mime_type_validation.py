@@ -41,6 +41,7 @@ coalesce_types = [
 sample_files = [
     ('ASampleDatabase.accdb', 'ACCDB',
      ['application/msaccess', 'application/x-msaccess']),
+    ('example.asc', 'ASC', 'application/x-ascii-grid'),
     ('foo.csv', 'CSV', 'text/csv'),
     ('example.docx', 'DOCX',
      'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
