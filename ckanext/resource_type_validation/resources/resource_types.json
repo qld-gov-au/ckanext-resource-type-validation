@@ -31,6 +31,7 @@
     },
     "equal_types": [
         ["text/xml", "application/xml"],
+        ["application/x-cdf", "application/x-netcdf"],
         ["application/msaccess", "application/x-msaccess", "application/vnd.msaccess", "application/vnd.ms-access", "application/mdb", "application/x-mdb"],
         ["application/CDFV2", "application/CDFV2-unknown"]
     ],
