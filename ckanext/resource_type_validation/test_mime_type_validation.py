@@ -41,6 +41,8 @@ coalesce_types = [
 sample_files = [
     ('ASampleDatabase.accdb', 'ACCDB',
      ['application/msaccess', 'application/x-msaccess']),
+    ('example.asc', 'ASC', 'application/x-ascii-grid'),
+    ('example.cdf', 'CDF', ['application/x-cdf', 'application/x-netcdf']),
     ('foo.csv', 'CSV', 'text/csv'),
     ('example.docx', 'DOCX',
      'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
@@ -60,6 +62,7 @@ sample_files = [
     ('example.kml', 'KML', 'application/vnd.google-earth.kml+xml'),
     ('Assets3_Data.mdb', 'MDB',
      ['application/msaccess', 'application/x-msaccess']),
+    ('example.nc', 'NC', ['application/x-cdf', 'application/x-netcdf']),
     ('example.ppt', 'PPT', 'application/vnd.ms-powerpoint'),
     ('example.rdf', 'RDF', 'application/rdf+xml'),
     ('example.xls', 'XLS', 'application/vnd.ms-excel'),
