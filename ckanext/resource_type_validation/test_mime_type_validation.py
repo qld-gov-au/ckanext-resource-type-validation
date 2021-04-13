@@ -63,6 +63,8 @@ sample_files = [
     ('example.ppt', 'PPT', 'application/vnd.ms-powerpoint'),
     ('example.rdf', 'RDF', 'application/rdf+xml'),
     ('example.xls', 'XLS', 'application/vnd.ms-excel'),
+    ('example.png', 'PNG', 'image/png'),
+    ('example.tif', 'TIF', 'image/tiff'),
     # well-formed archives can specify any format
     ('example.zip', 'ZIP', 'application/zip'),
     ('example.zip', 'PDF', 'application/pdf'),
