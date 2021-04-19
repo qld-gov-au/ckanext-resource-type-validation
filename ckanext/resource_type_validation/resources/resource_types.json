@@ -22,7 +22,10 @@
             "application/rdf+xml",
             "application/vnd.google-earth.kml+xml"
         ],
-        "application/zip": ["application/vnd.google-earth.kmz"],
+        "application/zip": [
+            "application/vnd.google-earth.kmz",
+            "application/x-filegdb"
+        ],
         "application/CDFV2": [
             "application/vnd.ms-excel",
             "application/msword",
