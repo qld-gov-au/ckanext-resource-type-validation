@@ -63,6 +63,8 @@ sample_files = [
     ('file-sample_100kB.rtf', 'RTF', ['application/rtf', 'text/rtf']),
     ('example.shp', 'SHP', 'x-gis/x-shapefile'),
     ('example.sparql', 'SPARQL', 'application/sparql-query'),
+    ('Boundary.TAB', 'TAB', 'text/plain'),
+    ('Sample.tsv', 'TSV', 'text/tab-separated-values'),
     ('example.txt', 'TXT', 'text/plain'),
     ('example.wfs', 'WFS', 'application/xml'),
     ('example.wmts', 'WMTS', 'application/xml'),
