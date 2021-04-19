@@ -56,7 +56,7 @@ sample_files = [
     ('example.gpkg', 'GPKG', 'application/x-sqlite3'),
     ('example.gpx', 'GPX', 'application/xml'),
     ('example.html', 'HTML', 'text/html'),
-    ('example.jp2', 'JP2', 'image/jp2'),
+    ('sample1.jp2', 'JP2', 'image/jp2'),
     ('example.shp', 'SHP', 'x-gis/x-shapefile'),
     ('example.txt', 'TXT', 'text/plain'),
     ('example.wfs', 'WFS', 'application/xml'),
