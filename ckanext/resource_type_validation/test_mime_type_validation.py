@@ -62,6 +62,7 @@ sample_files = [
     ('dodecahedron.obj', 'OBJ', 'text/plain'),
     ('file-sample_100kB.rtf', 'RTF', ['application/rtf', 'text/rtf']),
     ('example.shp', 'SHP', 'x-gis/x-shapefile'),
+    ('example.sparql', 'SPARQL', 'application/sparql-query'),
     ('example.txt', 'TXT', 'text/plain'),
     ('example.wfs', 'WFS', 'application/xml'),
     ('example.wmts', 'WMTS', 'application/xml'),
