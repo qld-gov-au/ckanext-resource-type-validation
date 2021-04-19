@@ -46,6 +46,7 @@ sample_files = [
     ('foo.csv', 'CSV', 'text/csv'),
     ('example.docx', 'DOCX', 'application/'
      'vnd.openxmlformats-officedocument.wordprocessingml.document'),
+    ('sample.ecw', 'ECW', 'application/octet-stream'),
     ('example.kmz', 'KMZ', 'application/vnd.google-earth.kmz'),
     ('example.xml', 'XML', 'text/xml'),
     ('dummy.pdf', 'PDF', 'application/pdf'),
@@ -64,6 +65,7 @@ sample_files = [
     ('example.shp', 'SHP', 'x-gis/x-shapefile'),
     ('example.sparql', 'SPARQL', 'application/sparql-query'),
     ('Boundary.TAB', 'TAB', 'text/plain'),
+    ('belgium.topojson', 'TOPOJSON', 'application/json'),
     ('Sample.tsv', 'TSV', 'text/tab-separated-values'),
     ('example.txt', 'TXT', 'text/plain'),
     ('example.wfs', 'WFS', 'application/xml'),
