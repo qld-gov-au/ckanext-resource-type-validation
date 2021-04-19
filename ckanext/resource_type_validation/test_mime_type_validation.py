@@ -44,9 +44,8 @@ sample_files = [
     ('example.asc', 'ASC', 'application/x-ascii-grid'),
     ('example.cdf', 'CDF', ['application/x-cdf', 'application/x-netcdf']),
     ('foo.csv', 'CSV', 'text/csv'),
-    ('example.docx', 'DOCX',
-     'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-     ),
+    ('example.docx', 'DOCX', 'application/'
+     'vnd.openxmlformats-officedocument.wordprocessingml.document'),
     ('example.kmz', 'KMZ', 'application/vnd.google-earth.kmz'),
     ('example.xml', 'XML', 'text/xml'),
     ('dummy.pdf', 'PDF', 'application/pdf'),
@@ -65,8 +64,8 @@ sample_files = [
     ('example.txt', 'TXT', 'text/plain'),
     ('example.wfs', 'WFS', 'application/xml'),
     ('example.wmts', 'WMTS', 'application/xml'),
-    ('example.xlsx', 'XLSX',
-     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'),
+    ('example.xlsx', 'XLSX', 'application/'
+     'vnd.openxmlformats-officedocument.spreadsheetml.sheet'),
     ('example.doc', 'DOC', 'application/msword'),
     ('example.json', 'JSON', 'application/json'),
     ('example.kml', 'KML', 'application/vnd.google-earth.kml+xml'),
@@ -74,6 +73,8 @@ sample_files = [
      ['application/msaccess', 'application/x-msaccess']),
     ('example.nc', 'NC', ['application/x-cdf', 'application/x-netcdf']),
     ('example.ppt', 'PPT', 'application/vnd.ms-powerpoint'),
+    ('sample.pptx', 'PPTX', 'application/'
+     'vnd.openxmlformats-officedocument.presentationml.presentation'),
     ('example.rdf', 'RDF', 'application/rdf+xml'),
     ('example.xls', 'XLS', 'application/vnd.ms-excel'),
     ('example.png', 'PNG', 'image/png'),
