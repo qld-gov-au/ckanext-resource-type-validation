@@ -16,6 +16,7 @@
             "application/json",
             "application/rdf+xml",
             "application/vnd.google-earth.kml+xml",
+            "model/mtl",
             "text/*"
         ],
         "application/xml": [

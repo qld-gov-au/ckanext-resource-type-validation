@@ -58,6 +58,7 @@ sample_files = [
     ('example.html', 'HTML', 'text/html'),
     ('sample1.jp2', 'JP2', 'image/jp2'),
     ('sample_0.JPEG', 'JPEG', 'image/jpeg'),
+    ('example.mtl', 'MTL', 'model/mtl'),
     ('example.shp', 'SHP', 'x-gis/x-shapefile'),
     ('example.txt', 'TXT', 'text/plain'),
     ('example.wfs', 'WFS', 'application/xml'),
