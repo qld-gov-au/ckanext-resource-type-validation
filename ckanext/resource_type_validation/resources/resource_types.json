@@ -55,6 +55,7 @@
         ".kml": "application/vnd.google-earth.kml+xml",
         ".kmz": "application/vnd.google-earth.kmz",
         ".mtl": "model/mtl",
+        ".obj": "text/plain",
         ".n3": "text/n3",
         ".rdf": "application/rdf+xml",
         ".shp": "x-gis/x-shapefile",

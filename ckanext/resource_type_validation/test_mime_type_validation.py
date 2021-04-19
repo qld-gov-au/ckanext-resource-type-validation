@@ -60,6 +60,7 @@ sample_files = [
     ('sample_0.JPEG', 'JPEG', 'image/jpeg'),
     ('example.mtl', 'MTL', 'model/mtl'),
     ('example.n3', 'N3', 'text/n3'),
+    ('dodecahedron.obj', 'OBJ', 'text/plain'),
     ('example.shp', 'SHP', 'x-gis/x-shapefile'),
     ('example.txt', 'TXT', 'text/plain'),
     ('example.wfs', 'WFS', 'application/xml'),
