@@ -45,7 +45,6 @@
     "extra_mimetypes": {
         ".accdb": "application/msaccess",
         ".asc": "application/x-ascii-grid",
-        ".ecw": "application/x-ecw",
         ".esri": "x-gis/x-shapefile",
         ".fgdb": "application/x-filegdb",
         ".gdb": "application/x-filegdb",

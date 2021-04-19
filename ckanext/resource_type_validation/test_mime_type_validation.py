@@ -46,6 +46,7 @@ sample_files = [
     ('foo.csv', 'CSV', 'text/csv'),
     ('example.docx', 'DOCX', 'application/'
      'vnd.openxmlformats-officedocument.wordprocessingml.document'),
+    ('sample.ecw', 'ECW', 'application/octet-stream'),
     ('example.kmz', 'KMZ', 'application/vnd.google-earth.kmz'),
     ('example.xml', 'XML', 'text/xml'),
     ('dummy.pdf', 'PDF', 'application/pdf'),
