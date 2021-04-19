@@ -53,6 +53,7 @@ sample_files = [
     ('zoning.gdb', 'GDB', 'application/x-filegdb'),
     ('sample.geojson', 'GeoJSON', 'application/json'),
     ('ntf_nord.geotiff', 'GeoTIFF', 'image/tiff'),
+    ('example.gpkg', 'GPKG', 'application/x-sqlite3'),
     ('example.html', 'HTML', 'text/html'),
     ('example.shp', 'SHP', 'x-gis/x-shapefile'),
     ('example.txt', 'TXT', 'text/plain'),
