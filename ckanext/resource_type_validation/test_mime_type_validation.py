@@ -52,6 +52,7 @@ sample_files = [
     ('dummy.pdf', 'PDF', 'application/pdf'),
     ('zoning.gdb', 'GDB', 'application/x-filegdb'),
     ('sample.geojson', 'GeoJSON', 'application/json'),
+    ('ntf_nord.geotiff', 'GeoTIFF', 'image/tiff'),
     ('example.html', 'HTML', 'text/html'),
     ('example.shp', 'SHP', 'x-gis/x-shapefile'),
     ('example.txt', 'TXT', 'text/plain'),
