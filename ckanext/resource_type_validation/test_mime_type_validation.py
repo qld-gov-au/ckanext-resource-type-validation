@@ -65,6 +65,7 @@ sample_files = [
     ('example.shp', 'SHP', 'x-gis/x-shapefile'),
     ('example.sparql', 'SPARQL', 'application/sparql-query'),
     ('Boundary.TAB', 'TAB', 'text/plain'),
+    ('belgium.topojson', 'TOPOJSON', 'application/json'),
     ('Sample.tsv', 'TSV', 'text/tab-separated-values'),
     ('example.txt', 'TXT', 'text/plain'),
     ('example.wfs', 'WFS', 'application/xml'),
