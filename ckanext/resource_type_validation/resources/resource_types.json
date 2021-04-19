@@ -34,6 +34,7 @@
         ]
     },
     "equal_types": [
+        ["text/rtf", "text/richtext", "application/rtf", "application/x-rtf"],
         ["text/xml", "application/xml"],
         ["application/x-cdf", "application/x-netcdf"],
         ["application/msaccess", "application/x-msaccess", "application/vnd.msaccess", "application/vnd.ms-access", "application/mdb", "application/x-mdb"],

@@ -60,6 +60,7 @@ sample_files = [
     ('example.mtl', 'MTL', 'model/mtl'),
     ('example.n3', 'N3', 'text/n3'),
     ('dodecahedron.obj', 'OBJ', 'text/plain'),
+    ('file-sample_100kB.rtf', 'RTF', ['application/rtf', 'text/rtf']),
     ('example.shp', 'SHP', 'x-gis/x-shapefile'),
     ('example.txt', 'TXT', 'text/plain'),
     ('example.wfs', 'WFS', 'application/xml'),
