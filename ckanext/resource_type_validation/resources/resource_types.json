@@ -16,13 +16,17 @@
             "application/json",
             "application/rdf+xml",
             "application/vnd.google-earth.kml+xml",
+            "model/mtl",
             "text/*"
         ],
         "application/xml": [
             "application/rdf+xml",
             "application/vnd.google-earth.kml+xml"
         ],
-        "application/zip": ["application/vnd.google-earth.kmz"],
+        "application/zip": [
+            "application/vnd.google-earth.kmz",
+            "application/x-filegdb"
+        ],
         "application/CDFV2": [
             "application/vnd.ms-excel",
             "application/msword",
@@ -30,7 +34,10 @@
         ]
     },
     "equal_types": [
+        ["text/rtf", "text/richtext", "application/rtf", "application/x-rtf"],
         ["text/xml", "application/xml"],
+        ["application/x-cdf", "application/x-netcdf"],
+        ["application/msaccess", "application/x-msaccess", "application/vnd.msaccess", "application/vnd.ms-access", "application/mdb", "application/x-mdb"],
         ["application/CDFV2", "application/CDFV2-unknown"]
     ],
     "generic_types": ["application/octet-stream", "text/plain"],
@@ -38,7 +45,7 @@
     "extra_mimetypes": {
         ".accdb": "application/msaccess",
         ".asc": "application/x-ascii-grid",
-        ".ecw": "application/x-ecw",
+        ".ecw": "application/octet-stream",
         ".esri": "x-gis/x-shapefile",
         ".fgdb": "application/x-filegdb",
         ".gdb": "application/x-filegdb",
@@ -49,6 +56,7 @@
         ".kml": "application/vnd.google-earth.kml+xml",
         ".kmz": "application/vnd.google-earth.kmz",
         ".mtl": "model/mtl",
+        ".obj": "text/plain",
         ".n3": "text/n3",
         ".rdf": "application/rdf+xml",
         ".shp": "x-gis/x-shapefile",

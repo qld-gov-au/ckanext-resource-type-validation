@@ -39,26 +39,52 @@ coalesce_types = [
 ]
 
 sample_files = [
+    ('ASampleDatabase.accdb', 'ACCDB',
+     ['application/msaccess', 'application/x-msaccess']),
+    ('example.asc', 'ASC', 'application/x-ascii-grid'),
+    ('example.cdf', 'CDF', ['application/x-cdf', 'application/x-netcdf']),
     ('foo.csv', 'CSV', 'text/csv'),
-    ('example.docx', 'DOCX',
-     'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-     ),
+    ('example.docx', 'DOCX', 'application/'
+     'vnd.openxmlformats-officedocument.wordprocessingml.document'),
+    ('sample.ecw', 'ECW', 'application/octet-stream'),
     ('example.kmz', 'KMZ', 'application/vnd.google-earth.kmz'),
     ('example.xml', 'XML', 'text/xml'),
     ('dummy.pdf', 'PDF', 'application/pdf'),
+    ('zoning.gdb', 'GDB', 'application/x-filegdb'),
+    ('sample.geojson', 'GeoJSON', 'application/json'),
+    ('ntf_nord.geotiff', 'GeoTIFF', 'image/tiff'),
+    ('example.gpkg', 'GPKG', 'application/x-sqlite3'),
+    ('example.gpx', 'GPX', 'application/xml'),
     ('example.html', 'HTML', 'text/html'),
+    ('sample1.jp2', 'JP2', 'image/jp2'),
+    ('sample_0.JPEG', 'JPEG', 'image/jpeg'),
+    ('example.mtl', 'MTL', 'model/mtl'),
+    ('example.n3', 'N3', 'text/n3'),
+    ('dodecahedron.obj', 'OBJ', 'text/plain'),
+    ('file-sample_100kB.rtf', 'RTF', ['application/rtf', 'text/rtf']),
     ('example.shp', 'SHP', 'x-gis/x-shapefile'),
+    ('example.sparql', 'SPARQL', 'application/sparql-query'),
+    ('Boundary.TAB', 'TAB', 'text/plain'),
+    ('belgium.topojson', 'TOPOJSON', 'application/json'),
+    ('Sample.tsv', 'TSV', 'text/tab-separated-values'),
     ('example.txt', 'TXT', 'text/plain'),
     ('example.wfs', 'WFS', 'application/xml'),
     ('example.wmts', 'WMTS', 'application/xml'),
-    ('example.xlsx', 'XLSX',
-     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'),
+    ('example.xlsx', 'XLSX', 'application/'
+     'vnd.openxmlformats-officedocument.spreadsheetml.sheet'),
     ('example.doc', 'DOC', 'application/msword'),
     ('example.json', 'JSON', 'application/json'),
     ('example.kml', 'KML', 'application/vnd.google-earth.kml+xml'),
+    ('Assets3_Data.mdb', 'MDB',
+     ['application/msaccess', 'application/x-msaccess']),
+    ('example.nc', 'NC', ['application/x-cdf', 'application/x-netcdf']),
     ('example.ppt', 'PPT', 'application/vnd.ms-powerpoint'),
+    ('sample.pptx', 'PPTX', 'application/'
+     'vnd.openxmlformats-officedocument.presentationml.presentation'),
     ('example.rdf', 'RDF', 'application/rdf+xml'),
     ('example.xls', 'XLS', 'application/vnd.ms-excel'),
+    ('example.png', 'PNG', 'image/png'),
+    ('example.tif', 'TIF', 'image/tiff'),
     # well-formed archives can specify any format
     ('example.zip', 'ZIP', 'application/zip'),
     ('example.zip', 'PDF', 'application/pdf'),
@@ -144,7 +170,14 @@ class TestMimeTypeValidation(unittest.TestCase):
 
             try:
                 self.validator.validate_resource_mimetype(resource)
-                self.assertEqual(resource['mimetype'], expected_type)
+                error_msg = '{} has an unexpected MIME type {}'.format(
+                    filename, resource['mimetype'])
+                if isinstance(expected_type, list):
+                    assert_function = self.assertIn
+                else:
+                    assert_function = self.assertEqual
+                assert_function(
+                    resource['mimetype'], expected_type, error_msg)
             finally:
                 sample_file.close()
 
