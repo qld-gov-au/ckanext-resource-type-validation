@@ -6,7 +6,8 @@ ckanext-resource-type-validation
 Overview
 --------
 A CKAN extension that performs stricter validation of resource formats
-for uploaded files.
+for uploaded files, ensuring that the file extension, file contents,
+and resource format are all compatible with each other.
 
 1. Reduces workload on back of house staff in fixing up format selection
 on miscategorised files.
