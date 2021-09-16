@@ -2,7 +2,7 @@
 
 from ckan import plugins
 
-from resource_type_validation import ResourceTypeValidator
+from ckanext.resource_type_validation.resource_type_validation import ResourceTypeValidator
 
 
 class ResourceTypeValidationPlugin(plugins.SingletonPlugin):
