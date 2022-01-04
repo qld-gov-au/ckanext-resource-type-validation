@@ -19,6 +19,7 @@
             "model/mtl",
             "text/*"
         ],
+        "text/x-fortran": ["text/csv"],
         "application/xml": [
             "application/rdf+xml",
             "application/vnd.google-earth.kml+xml"
