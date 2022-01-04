@@ -44,6 +44,7 @@ sample_files = [
     ('example.asc', 'ASC', 'application/x-ascii-grid'),
     ('example.cdf', 'CDF', ['application/x-cdf', 'application/x-netcdf']),
     ('foo.csv', 'CSV', 'text/csv'),
+    ('fortran-bug.csv', 'CSV', 'text/csv'),
     ('example.docx', 'DOCX', 'application/'
      'vnd.openxmlformats-officedocument.wordprocessingml.document'),
     ('sample.ecw', 'ECW', 'application/octet-stream'),
