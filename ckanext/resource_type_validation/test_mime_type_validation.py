@@ -90,6 +90,7 @@ sample_files = [
     ('example.zip', 'ZIP', 'application/zip'),
     ('example.zip', 'PDF', 'application/pdf'),
     ('example.zip', 'DOC', 'application/msword'),
+    ('bildschirmfoto-2022-01-06-um-22.10.37.png', 'PNG', 'image/png'),
 ]
 
 sample_file_rejections = [
