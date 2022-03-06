@@ -85,7 +85,8 @@ class ResourceTypeValidator:
 
     def validate_resource_mimetype(self, resource):
         upload_field_storage = resource.get('upload', None)
-        if isinstance(upload_field_storage, ALLOWED_UPLOAD_TYPES):
+        if isinstance(upload_field_storage, ALLOWED_UPLOAD_TYPES) \
+                and upload_field_storage.filename:
             filename = upload_field_storage.filename
 
             mime = magic.Magic(mime=True)
