@@ -5,7 +5,7 @@
 
 import unittest
 
-from resource_type_validation import ResourceTypeValidator,\
+from .resource_type_validation import ResourceTypeValidator,\
     normalize_whitespace
 from ckan.logic import ValidationError
 from werkzeug.datastructures import FileStorage as FlaskFileStorage
