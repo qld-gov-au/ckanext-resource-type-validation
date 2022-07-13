@@ -26,7 +26,10 @@
         ],
         "application/zip": [
             "application/vnd.google-earth.kmz",
-            "application/x-filegdb"
+            "application/x-filegdb",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         ],
         "application/CDFV2": [
             "application/vnd.ms-excel",

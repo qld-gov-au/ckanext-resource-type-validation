@@ -35,10 +35,10 @@ jobs:
     - name: Install requirements
       run: |
         pip install -r requirements.txt
+        pip install -r dev-requirements.txt
         pip install -e .
 
-    - name: Run all tests
+    - name: Run tests
       run: |
-        PYTHON=`which python3 || which python`
-        $PYTHON ckanext/resource_type_validation/test_mime_type_validation.py
+        pytest ckanext/resource_type_validation/test_mime_type_validation.py
 
