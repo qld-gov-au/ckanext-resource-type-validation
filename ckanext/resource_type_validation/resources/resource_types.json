@@ -15,10 +15,12 @@
             "application/xml",
             "application/json",
             "application/rdf+xml",
+            "application/csv",
             "application/vnd.google-earth.kml+xml",
             "model/mtl",
             "text/*"
         ],
+        "text/csv": ["application/csv"],
         "text/x-fortran": ["text/csv"],
         "application/xml": [
             "application/rdf+xml",
