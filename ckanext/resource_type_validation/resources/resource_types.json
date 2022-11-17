@@ -9,6 +9,12 @@
     ],
     "allowed_overrides": {
         "application/octet-stream": ["*"],
+        "application/x-ole-storage": [
+            "application/msword",
+            "application/vnd.ms-powerpoint",
+            "application/vnd.ms-excel",
+            "application/vnd.ms-powerpoint"
+        ],
         "text/plain": [
             "application/sparql-query",
             "application/x-ascii-grid",
@@ -43,8 +49,11 @@
         ["text/rtf", "text/richtext", "application/rtf", "application/x-rtf"],
         ["text/xml", "application/xml"],
         ["application/x-cdf", "application/x-netcdf"],
+        ["application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"],
+        ["application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"],
         ["application/msaccess", "application/x-msaccess", "application/vnd.msaccess", "application/vnd.ms-access", "application/mdb", "application/x-mdb"],
-        ["application/CDFV2", "application/CDFV2-unknown"]
+        ["application/CDFV2", "application/CDFV2-unknown"],
+        ["application/x-sqlite3" ,"application/vnd.sqlite3"]
     ],
     "generic_types": ["application/octet-stream", "text/plain"],
     "archive_types": ["application/zip", "application/x-tar"],

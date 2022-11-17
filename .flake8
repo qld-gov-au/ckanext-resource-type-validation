@@ -1,7 +1,7 @@
 [flake8]
 # @see https://flake8.pycqa.org/en/latest/user/configuration.html?highlight=.flake8
 
-exclude =
+exclude = venv
 
 # Extended output format.
 format = pylint
