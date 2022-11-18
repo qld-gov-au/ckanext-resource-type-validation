@@ -5,8 +5,13 @@
 
 import unittest
 
-from .resource_type_validation import ResourceTypeValidator,\
-    normalize_whitespace
+if __name__ == '__main__':
+    from resource_type_validation import ResourceTypeValidator, \
+        normalize_whitespace
+else:
+    from .resource_type_validation import ResourceTypeValidator, \
+        normalize_whitespace
+
 from ckan.logic import ValidationError
 from werkzeug.datastructures import FileStorage as FlaskFileStorage
 
@@ -47,14 +52,16 @@ sample_files = [
     ('fortran-bug.csv', 'CSV', 'text/csv'),
     ('example.docx', 'DOCX', 'application/'
      'vnd.openxmlformats-officedocument.wordprocessingml.document'),
+    ('example.docx', 'DOCX', ['application/msword', 'application/'
+     'vnd.openxmlformats-officedocument.wordprocessingml.document']),
     ('sample.ecw', 'ECW', 'application/octet-stream'),
     ('example.kmz', 'KMZ', 'application/vnd.google-earth.kmz'),
-    ('example.xml', 'XML', 'text/xml'),
+    ('example.xml', 'XML', ['text/xml', 'application/xml']),
     ('dummy.pdf', 'PDF', 'application/pdf'),
     ('zoning.gdb', 'GDB', 'application/x-filegdb'),
     ('sample.geojson', 'GeoJSON', 'application/json'),
     ('ntf_nord.geotiff', 'GeoTIFF', 'image/tiff'),
-    ('example.gpkg', 'GPKG', 'application/x-sqlite3'),
+    ('example.gpkg', 'GPKG', ['application/x-sqlite3', 'application/vnd.sqlite3']),
     ('example.gpx', 'GPX', 'application/xml'),
     ('example.html', 'HTML', 'text/html'),
     ('sample1.jp2', 'JP2', 'image/jp2'),
@@ -73,6 +80,8 @@ sample_files = [
     ('example.wmts', 'WMTS', 'application/xml'),
     ('example.xlsx', 'XLSX', 'application/'
      'vnd.openxmlformats-officedocument.spreadsheetml.sheet'),
+    ('example.xlsx', 'XLSX', ['application/vnd.ms-excel', 'application/'
+     'vnd.openxmlformats-officedocument.spreadsheetml.sheet']),
     ('example.doc', 'DOC', 'application/msword'),
     ('example.json', 'JSON', 'application/json'),
     ('example.kml', 'KML', 'application/vnd.google-earth.kml+xml'),
@@ -177,6 +186,7 @@ class TestMimeTypeValidation(unittest.TestCase):
                     assert_function = self.assertIn
                 else:
                     assert_function = self.assertEqual
+                # print(resource, expected_type, error_msg)
                 assert_function(
                     resource['mimetype'], expected_type, error_msg)
             finally:

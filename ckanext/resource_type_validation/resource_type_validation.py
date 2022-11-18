@@ -95,8 +95,16 @@ class ResourceTypeValidator:
             sniffed_mimetype = mime.from_buffer(upload_file.read(2048))
             # go back to the beginning of the file buffer
             upload_file.seek(0, os.SEEK_SET)
+            # When on old libmagic/file lookup, it needs the full file for type sniffing to be successful.
+            if (sniffed_mimetype.startswith('Composite Document File V2 Document, corrupt')):
+                sniffed_mimetype = mime.from_buffer(upload_file.read())
+                # go back to the beginning of the file buffer
+                upload_file.seek(0, os.SEEK_SET)
+
             LOG.debug('Upload sniffing indicates MIME type %s',
                       sniffed_mimetype)
+            # print('Upload sniffing indicates MIME type ',
+            #           sniffed_mimetype, upload_file, '\r\n')
         elif IS_REMOTE_URL_PATTERN.search(
                 resource.get('url', 'http://example.com')
         ):
@@ -154,11 +162,19 @@ class ResourceTypeValidator:
             and format_mimetype not in self.generic_mimetypes\
             or filename_mimetype in self.archive_mimetypes
 
-        best_guess_mimetype = resource['mimetype'] = self.coalesce_mime_types(
-            [filename_mimetype, format_mimetype, sniffed_mimetype,
-             claimed_mimetype],
-            allow_override=allow_override
-        )
+        try:
+            best_guess_mimetype = resource['mimetype'] = self.coalesce_mime_types(
+                [filename_mimetype, format_mimetype, sniffed_mimetype,
+                 claimed_mimetype],
+                allow_override=allow_override
+            )
+        except ValidationError as e:
+            LOG.debug("Best guess at MIME type failed %s - upload type: %s format type: %s sniffed: %s claimed: %s",
+                      resource.get('url'), filename_mimetype, format_mimetype, sniffed_mimetype, claimed_mimetype)
+            # print(resource.get('url'), ' upload type: ', filename_mimetype,' format type: ', format_mimetype,
+            # "sniffed: ", sniffed_mimetype, " claimed: ", claimed_mimetype, 'failed', '\r\n')
+            raise e
+
         LOG.debug("Best guess at MIME type is %s", best_guess_mimetype)
         if not self.is_mimetype_allowed(best_guess_mimetype):
             raise ValidationError(
