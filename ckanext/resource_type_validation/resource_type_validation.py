@@ -95,6 +95,12 @@ class ResourceTypeValidator:
             sniffed_mimetype = mime.from_buffer(upload_file.read(2048))
             # go back to the beginning of the file buffer
             upload_file.seek(0, os.SEEK_SET)
+            # When on old libmagic/file lookup, it needs the full file for type sniffing to be successful.
+            if (sniffed_mimetype.startswith('Composite Document File V2 Document, corrupt')):
+                sniffed_mimetype = mime.from_buffer(upload_file.read())
+                # go back to the beginning of the file buffer
+                upload_file.seek(0, os.SEEK_SET)
+
             LOG.debug('Upload sniffing indicates MIME type %s',
                       sniffed_mimetype)
             # print('Upload sniffing indicates MIME type ',
