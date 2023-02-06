@@ -72,6 +72,8 @@
         ".kmz": "application/vnd.google-earth.kmz",
         ".mtl": "model/mtl",
         ".obj": "text/plain",
+        ".pqt": "application/octet-stream",
+        ".parquet": "application/octet-stream",
         ".n3": "text/n3",
         ".rdf": "application/rdf+xml",
         ".shp": "x-gis/x-shapefile",
