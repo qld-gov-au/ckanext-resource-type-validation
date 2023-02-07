@@ -99,6 +99,8 @@ sample_files = [
     ('example.zip', 'ZIP', 'application/zip'),
     ('example.zip', 'PDF', 'application/pdf'),
     ('example.zip', 'DOC', 'application/msword'),
+    ('example.parquet', 'PARQUET', 'application/octet-stream'),
+    ('example.pqt', 'PARQUET', 'application/octet-stream'),
 ]
 
 sample_file_rejections = [

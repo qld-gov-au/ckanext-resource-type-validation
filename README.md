@@ -151,3 +151,10 @@ To run the tests:
         ```
 
     1. Run ``nosetests``
+
+
+Alternative testing with Docker
+  ```
+  docker run -it  -v $(pwd):/home/runner/work openknowledge/ckan-dev:2.9 bash -x /home/runner/work/test.sh
+  ```
+
