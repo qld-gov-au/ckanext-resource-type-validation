@@ -130,3 +130,6 @@ dmypy.json
 
 #Intellij
 .idea
+
+# Generated
+Dockerfile.ckan
