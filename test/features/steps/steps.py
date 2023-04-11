@@ -8,6 +8,12 @@ import quopri
 import six
 
 
+# Monkey-patch Selenium 3 to handle Python 3.9
+import base64
+if not hasattr(base64, 'encodestring'):
+    base64.encodestring = base64.encodebytes
+
+
 @step(u'I get the current URL')
 def get_current_url(context):
     context.browser.evaluate_script("document.documentElement.clientWidth")

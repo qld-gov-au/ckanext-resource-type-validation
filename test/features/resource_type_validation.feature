@@ -7,6 +7,7 @@ Feature: Resource type validation
         And I press "Manage"
         And I press "Resources"
         And I press "Add new resource"
+        And I execute the script "button = document.getElementById('resource-upload-button'); if (button) button.click();"
         And I attach the file "eicar.com.pdf" to "upload"
         And I fill in "name" with "Testing EICAR PDF"
         And I fill in "description" with "Testing EICAR sample virus file with PDF extension"
