@@ -1,3 +1,10 @@
+behave==1.2.6
+behaving==2.0.0
+Appium-Python-Client<=0.52
 ckanapi==4.3
+ckantoolkit>=0.0.4
+factory-boy
+flake8==3.8.3
 mock
-pytest
+pytest-ckan
+splinter>=0.13.0,<0.17
