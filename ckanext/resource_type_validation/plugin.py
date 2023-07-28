@@ -19,12 +19,20 @@ class ResourceTypeValidationPlugin(plugins.SingletonPlugin):
 
     # IResourceController
 
+    # CKAN 2.9
     def before_create(self, context, data_dict):
+        return self.before_resource_create(context, data_dict)
+
+    def before_update(self, context, existing_resource, data_dict):
+        return self.before_resource_update(context, existing_resource, data_dict)
+
+    # CKAN 2.10
+    def before_resource_create(self, context, data_dict):
         """ Check that uploads have an acceptable mime type.
         """
         self.validator.validate_resource_mimetype(data_dict)
 
-    def before_update(self, context, existing_resource, data_dict):
+    def before_resource_update(self, context, existing_resource, data_dict):
         """ Check that uploads have an acceptable mime type.
         """
         self.validator.validate_resource_mimetype(data_dict)
