@@ -129,12 +129,13 @@ class ResourceTypeValidator:
         filename_mimetype = mimetypes.guess_type(
             filename,
             strict=False)[0]
-        LOG.debug("Upload filename indicates MIME type %s", filename_mimetype)
+        LOG.debug("Upload filename [%s] indicates MIME type %s", filename, filename_mimetype)
 
+        resource_format = resource.get('format', '')
         format_mimetype = mimetypes.guess_type(
-            'example.' + resource.get('format', ''),
+            'example.' + resource_format,
             strict=False)[0]
-        LOG.debug("Upload format indicates MIME type %s", format_mimetype)
+        LOG.debug("Upload format [%s] indicates MIME type %s", resource_format, format_mimetype)
 
         # Archives can declare any format, but only if they're well formed
         if any(type in self.archive_mimetypes
