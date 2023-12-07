@@ -23,8 +23,10 @@ services:
       context: .
       dockerfile: .docker/Dockerfile.ckan
     depends_on:
-      - postgres
-      - solr
+      postgres:
+        condition: service_healthy
+      solr:
+        condition: service_started
     networks:
       - amazeeio-network
       - default
@@ -47,6 +49,8 @@ services:
       - default
     environment:
       <<: *default-environment
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
 
   redis:
     image: redis:6-alpine

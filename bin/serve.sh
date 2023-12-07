@@ -7,8 +7,10 @@ dockerize -wait tcp://redis:6379 -timeout 1m
 
 for i in `seq 1 60`; do
     if (PGPASSWORD=pass psql -h postgres -U ckan_default -d ckan_test -c "\q"); then
+        echo "Database became ready on attempt $i"
         break
     else
+        echo "Database not yet ready, retrying (attempt $i)..."
         sleep 1
     fi
 done
