@@ -127,7 +127,7 @@ class ResourceTypeValidator:
         LOG.debug("Upload claims to have MIME type %s", claimed_mimetype)
 
         filename_mimetype = mimetypes.guess_type(
-            filename,
+            resource.get('url') or filename,
             strict=False)[0]
         LOG.debug("Upload filename [%s] indicates MIME type %s", filename, filename_mimetype)
 
@@ -171,8 +171,8 @@ class ResourceTypeValidator:
             )
         except ValidationError as e:
             LOG.debug("Best guess at MIME type failed %s - upload type: %s format type: %s sniffed: %s claimed: %s",
-                      resource.get('url'), filename_mimetype, format_mimetype, sniffed_mimetype, claimed_mimetype)
-            # print(resource.get('url'), ' upload type: ', filename_mimetype,' format type: ', format_mimetype,
+                      resource.get('url') or filename, filename_mimetype, format_mimetype, sniffed_mimetype, claimed_mimetype)
+            # print(resource.get('url') or filename, ' upload type: ', filename_mimetype,' format type: ', format_mimetype,
             # "sniffed: ", sniffed_mimetype, " claimed: ", claimed_mimetype, 'failed', '\r\n')
             raise e
 
