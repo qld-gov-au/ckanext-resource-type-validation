@@ -129,7 +129,7 @@ class ResourceTypeValidator:
         filename_mimetype = mimetypes.guess_type(
             resource.get('url') or filename,
             strict=False)[0]
-        LOG.debug("Upload filename [%s] indicates MIME type %s", filename, filename_mimetype)
+        LOG.debug("Upload filename [%s] indicates MIME type %s", resource.get('url') or filename, filename_mimetype)
 
         resource_format = resource.get('format', '')
         format_mimetype = mimetypes.guess_type(
