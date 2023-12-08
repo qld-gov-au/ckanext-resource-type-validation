@@ -7,11 +7,13 @@ on:
       - master
 
 jobs:
+  # Quick check so we don't waste minutes if there's a Flake8 error
   lint:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
+      - uses: actions/setup-python@v4
         with:
           python-version: '3.x'
       - name: Install requirements
@@ -28,7 +30,7 @@ jobs:
 
     name: Test on CKAN ${{ matrix.ckan-version }}
     runs-on: ubuntu-latest
-    container: drevops/ci-builder
+    container: drevops/ci-builder:23.7.0
     env:
       CKAN_VERSION: ${{ matrix.ckan-version }}
 
