@@ -127,14 +127,15 @@ class ResourceTypeValidator:
         LOG.debug("Upload claims to have MIME type %s", claimed_mimetype)
 
         filename_mimetype = mimetypes.guess_type(
-            resource.get('url'),
+            resource.get('url') or filename,
             strict=False)[0]
-        LOG.debug("Upload filename indicates MIME type %s", filename_mimetype)
+        LOG.debug("Upload filename [%s] indicates MIME type %s", resource.get('url') or filename, filename_mimetype)
 
+        resource_format = resource.get('format', '')
         format_mimetype = mimetypes.guess_type(
-            'example.' + resource.get('format', ''),
+            'example.' + resource_format,
             strict=False)[0]
-        LOG.debug("Upload format indicates MIME type %s", format_mimetype)
+        LOG.debug("Upload format [%s] indicates MIME type %s", resource_format, format_mimetype)
 
         # Archives can declare any format, but only if they're well formed
         if any(type in self.archive_mimetypes
@@ -170,8 +171,8 @@ class ResourceTypeValidator:
             )
         except ValidationError as e:
             LOG.debug("Best guess at MIME type failed %s - upload type: %s format type: %s sniffed: %s claimed: %s",
-                      resource.get('url'), filename_mimetype, format_mimetype, sniffed_mimetype, claimed_mimetype)
-            # print(resource.get('url'), ' upload type: ', filename_mimetype,' format type: ', format_mimetype,
+                      resource.get('url') or filename, filename_mimetype, format_mimetype, sniffed_mimetype, claimed_mimetype)
+            # print(resource.get('url') or filename, ' upload type: ', filename_mimetype,' format type: ', format_mimetype,
             # "sniffed: ", sniffed_mimetype, " claimed: ", claimed_mimetype, 'failed', '\r\n')
             raise e
 

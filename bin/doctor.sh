@@ -31,7 +31,6 @@ main() {
 
   if [ "${DOCTOR_CHECK_TOOLS}" == "1" ]; then
     [ "$(command_exists docker)" == "1" ] && error "Please install Docker (https://www.docker.com/get-started)" && exit 1
-    [ "$(command_exists docker-compose)" == "1" ] && error "Please install docker-compose (https://docs.docker.com/compose/install/)" && exit 1
     [ "$(command_exists composer)" == "1" ] && error "Please install Composer (https://getcomposer.org/)" && exit 1
     [ "$(command_exists pygmy)" == "1" ] && error "Please install Pygmy (https://pygmy.readthedocs.io/)" && exit 1
     [ "$(command_exists ahoy)" == "1" ] && error "Please install Ahoy (https://ahoy-cli.readthedocs.io/)" && exit 1
@@ -55,7 +54,7 @@ main() {
 
   # Check that the stack is running.
   if [ "${DOCTOR_CHECK_CLI}" == "1" ]; then
-    if ! docker ps -q --no-trunc | grep "$(docker-compose ps -q ckan)" > /dev/null 2>&1; then
+    if ! docker ps -q --no-trunc | grep "$(sh bin/docker-compose.sh ps -q ckan)" > /dev/null 2>&1; then
       error "CLI container is not running. Run 'ahoy up'."
       exit 1
     fi
@@ -94,7 +93,7 @@ main() {
     fi
 
     # Check that the volume is mounted into CLI container.
-    if ! docker exec -i "$(docker-compose ps -q ckan)" sh -c "grep \"^/dev\" /etc/mtab|grep -q /tmp/amazeeio_ssh-agent"; then
+    if ! docker exec -i "$(sh bin/docker-compose.sh ps -q ckan)" sh -c "grep \"^/dev\" /etc/mtab|grep -q /tmp/amazeeio_ssh-agent"; then
       error "SSH key is added to Pygmy, but the volume is not mounted into container. Make sure that your your \"docker-compose.yml\" has the following lines:"
       error "volumes_from:"
       error "  - container:amazeeio-ssh-agent"
@@ -103,7 +102,7 @@ main() {
     fi
 
     # Check that ssh key is available in the container.
-    if ! docker exec -i "$(docker-compose ps -q ckan)" bash -c "ssh-add -L | grep -q 'ssh-rsa'" ; then
+    if ! docker exec -i "$(sh bin/docker-compose.sh ps -q ckan)" bash -c "ssh-add -L | grep -q 'ssh-rsa'" ; then
       error "SSH key was not added into container. Run 'ahoy up -- --build'."
       exit 1
     fi
@@ -113,7 +112,7 @@ main() {
 
 
   if [ "${DOCTOR_CHECK_WEBSERVER}" == "1" ]; then
-    host_app_port="$(docker port $(docker-compose ps -q ckan) $APP_PORT | cut -d : -f 2)"
+    host_app_port="$(docker port $(sh bin/docker-compose.sh ps -q ckan) $APP_PORT | cut -d : -f 2)"
     if ! curl -L -s -o /dev/null -w "%{http_code}" "${LAGOON_LOCALDEV_URL}:${host_app_port}" | grep -q 200; then
       error "Web server is not accessible at ${LAGOON_LOCALDEV_URL}:${host_app_port}"
       exit 1
@@ -122,7 +121,7 @@ main() {
   fi
 
   if [ "${DOCTOR_CHECK_BOOTSTRAP}" == "1" ]; then
-    host_app_port="$(docker port $(docker-compose ps -q ckan) $APP_PORT | cut -d : -f 2)"
+    host_app_port="$(docker port $(sh bin/docker-compose.sh ps -q ckan) $APP_PORT | cut -d : -f 2)"
     if ! curl -L -s -N "${LAGOON_LOCALDEV_URL}:${host_app_port}" | grep -q -i "meta name=\"generator\" content=\"ckan"; then
       error "Website is running, but cannot be bootstrapped. Try pulling latest container images with 'ahoy pull'"
       exit 1
