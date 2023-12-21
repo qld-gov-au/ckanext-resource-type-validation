@@ -13,6 +13,7 @@ import six
 
 from ckan.lib.uploader import ALLOWED_UPLOAD_TYPES
 from ckan.logic import ValidationError
+from ckan.plugins.toolkit import config
 from werkzeug.datastructures import FileStorage as FlaskFileStorage
 
 LOG = getLogger(__name__)
@@ -106,10 +107,10 @@ class ResourceTypeValidator:
             # print('Upload sniffing indicates MIME type ',
             #           sniffed_mimetype, upload_file, '\r\n')
         elif IS_REMOTE_URL_PATTERN.search(
-                resource.get('url', 'http://example.com')
+                resource.get('url', 'http://example.com').replace(config.get('ckan.site_url', ''), '')
         ):
-            LOG.debug('%s is not an uploaded resource, skipping validation',
-                      resource.get('id', 'New resource'))
+            LOG.debug('%s [%s] is not an uploaded resource, skipping validation',
+                      resource.get('id', 'New resource'), resource.get('url'))
             return
         else:
             LOG.debug('No upload in progress for %s; just sanity-check',
