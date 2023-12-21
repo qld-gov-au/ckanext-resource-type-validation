@@ -132,6 +132,9 @@ class ResourceTypeValidator:
             strict=False)[0]
         LOG.debug("Upload filename [%s] indicates MIME type %s", resource.get('url') or filename, filename_mimetype)
 
+        # If we're just sanity-checking, set a dummy sniffed type
+        sniffed_mimetype = sniffed_mimetype or claimed_mimetype or filename_mimetype
+
         resource_format = resource.get('format', '')
         format_mimetype = mimetypes.guess_type(
             'example.' + resource_format,
@@ -139,15 +142,17 @@ class ResourceTypeValidator:
         LOG.debug("Upload format [%s] indicates MIME type %s", resource_format, format_mimetype)
 
         # Archives can declare any format, but only if they're well formed
-        if any(type in self.archive_mimetypes
-               for type in (filename_mimetype, sniffed_mimetype)):
-            if self.type_equals(filename_mimetype, sniffed_mimetype)\
-                    or self.is_valid_override(
-                        filename_mimetype,
-                        sniffed_mimetype)[0]:
-                # well-formed archives can specify any format they want
-                sniffed_mimetype = filename_mimetype = claimed_mimetype =\
-                    format_mimetype or claimed_mimetype or filename_mimetype
+        if any(type_candidate in self.archive_mimetypes
+               for type_candidate in (filename_mimetype, sniffed_mimetype)):
+            valid_archive, subtype = self.is_valid_override(
+                filename_mimetype,
+                sniffed_mimetype)
+
+            if valid_archive:
+                # well-formed archives can specify any format they want,
+                # but the file itself is still ZIP
+                best_guess_mimetype = format_mimetype or filename_mimetype or claimed_mimetype
+                resource['mimetype'] = subtype
             else:
                 raise ValidationError(
                     {'upload': [
@@ -156,28 +161,27 @@ class ResourceTypeValidator:
                             sniffed_mimetype)
                     ]}
                 )
+        else:
+            # If the file extension or format matches a generic type,
+            # then sniffing should say the same.
+            # This is to prevent attacks based on browser sniffing.
+            allow_override = filename_mimetype not in self.generic_mimetypes\
+                and format_mimetype not in self.generic_mimetypes\
+                or filename_mimetype in self.archive_mimetypes
 
-        # If the file extension or format matches a generic type,
-        # then sniffing should say the same.
-        # This is to prevent attacks based on browser sniffing.
-        allow_override = filename_mimetype not in self.generic_mimetypes\
-            and format_mimetype not in self.generic_mimetypes\
-            or filename_mimetype in self.archive_mimetypes
+            try:
+                best_guess_mimetype = resource['mimetype'] = self.coalesce_mime_types(
+                    [filename_mimetype, format_mimetype, sniffed_mimetype,
+                     claimed_mimetype],
+                    allow_override=allow_override
+                )
+            except ValidationError as e:
+                LOG.debug("Best guess at MIME type failed %s - upload type: %s format type: %s sniffed: %s claimed: %s",
+                          resource.get('url') or filename,
+                          filename_mimetype, format_mimetype, sniffed_mimetype, claimed_mimetype)
+                raise e
 
-        try:
-            best_guess_mimetype = resource['mimetype'] = self.coalesce_mime_types(
-                [filename_mimetype, format_mimetype, sniffed_mimetype,
-                 claimed_mimetype],
-                allow_override=allow_override
-            )
-        except ValidationError as e:
-            LOG.debug("Best guess at MIME type failed %s - upload type: %s format type: %s sniffed: %s claimed: %s",
-                      resource.get('url') or filename, filename_mimetype, format_mimetype, sniffed_mimetype, claimed_mimetype)
-            # print(resource.get('url') or filename, ' upload type: ', filename_mimetype,' format type: ', format_mimetype,
-            # "sniffed: ", sniffed_mimetype, " claimed: ", claimed_mimetype, 'failed', '\r\n')
-            raise e
-
-        LOG.debug("Best guess at MIME type is %s", best_guess_mimetype)
+        LOG.debug("Best guess at MIME type is %s, content type is %s", best_guess_mimetype, resource['mimetype'])
         if not self.is_mimetype_allowed(best_guess_mimetype):
             raise ValidationError(
                 {'upload': [self.invalid_upload_message]}
@@ -238,6 +242,9 @@ class ResourceTypeValidator:
         If True, then the second return value is the more specific type,
         otherwise it is None.
         """
+        if self.type_equals(mime_type1, mime_type2):
+            return True, mime_type1
+
         def matches_override_list(mime_type, override_list):
             for override_type in override_list:
                 if override_type == '*'\

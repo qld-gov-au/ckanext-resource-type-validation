@@ -97,8 +97,8 @@ sample_files = [
     ('example.tif', 'TIF', 'image/tiff'),
     # well-formed archives can specify any format
     ('example.zip', 'ZIP', 'application/zip'),
-    ('example.zip', 'PDF', 'application/pdf'),
-    ('example.zip', 'DOC', 'application/msword'),
+    ('example.zip', 'PDF', 'application/zip'),
+    ('example.zip', 'DOC', 'application/zip'),
     ('example.parquet', 'PARQUET', 'application/octet-stream'),
     ('example.pqt', 'PARQUET', 'application/octet-stream'),
 ]
