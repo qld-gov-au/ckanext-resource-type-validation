@@ -200,10 +200,9 @@ class TestMimeTypeValidation(unittest.TestCase):
         """
         for filename, url, specified_format in sample_file_rejections:
             sample_file = open("test/resources/" + filename, "rb")
-            upload = FlaskFileStorage(filename=filename,
+            upload = FlaskFileStorage(filename=url,
                                       stream=sample_file)
-            resource = {'url': url,
-                        'format': specified_format,
+            resource = {'format': specified_format,
                         'upload': upload}
             try:
                 self.assertRaises(ValidationError,

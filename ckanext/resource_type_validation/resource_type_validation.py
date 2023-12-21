@@ -128,9 +128,9 @@ class ResourceTypeValidator:
         LOG.debug("Upload claims to have MIME type %s", claimed_mimetype)
 
         filename_mimetype = mimetypes.guess_type(
-            resource.get('url') or filename,
+            filename,
             strict=False)[0]
-        LOG.debug("Upload filename [%s] indicates MIME type %s", resource.get('url') or filename, filename_mimetype)
+        LOG.debug("Upload filename [%s] indicates MIME type %s", filename, filename_mimetype)
 
         # If we're just sanity-checking, set a dummy sniffed type
         sniffed_mimetype = sniffed_mimetype or claimed_mimetype or filename_mimetype
