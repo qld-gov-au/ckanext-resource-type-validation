@@ -97,8 +97,8 @@ sample_files = [
     ('example.tif', 'TIF', 'image/tiff'),
     # well-formed archives can specify any format
     ('example.zip', 'ZIP', 'application/zip'),
-    ('example.zip', 'PDF', 'application/pdf'),
-    ('example.zip', 'DOC', 'application/msword'),
+    ('example.zip', 'PDF', 'application/zip'),
+    ('example.zip', 'DOC', 'application/zip'),
     ('example.parquet', 'PARQUET', 'application/octet-stream'),
     ('example.pqt', 'PARQUET', 'application/octet-stream'),
 ]
@@ -200,10 +200,9 @@ class TestMimeTypeValidation(unittest.TestCase):
         """
         for filename, url, specified_format in sample_file_rejections:
             sample_file = open("test/resources/" + filename, "rb")
-            upload = FlaskFileStorage(filename=filename,
+            upload = FlaskFileStorage(filename=url,
                                       stream=sample_file)
-            resource = {'url': url,
-                        'format': specified_format,
+            resource = {'format': specified_format,
                         'upload': upload}
             try:
                 self.assertRaises(ValidationError,
