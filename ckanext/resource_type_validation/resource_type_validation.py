@@ -141,26 +141,16 @@ class ResourceTypeValidator:
             strict=False)[0]
         LOG.debug("Upload format [%s] indicates MIME type %s", resource_format, format_mimetype)
 
-        # Archives can declare any format, but only if they're well formed
-        if any(type_candidate in self.archive_mimetypes
-               for type_candidate in (filename_mimetype, sniffed_mimetype)):
-            valid_archive, subtype = self.is_valid_override(
-                filename_mimetype,
-                sniffed_mimetype)
+        valid_filetype, subtype = self.is_valid_override(
+            filename_mimetype,
+            sniffed_mimetype)
 
-            if valid_archive:
-                # well-formed archives can specify any format they want,
-                # but the file itself is still ZIP
-                best_guess_mimetype = format_mimetype or filename_mimetype or claimed_mimetype
-                resource['mimetype'] = subtype
-            else:
-                raise ValidationError(
-                    {'upload': [
-                        self.mismatching_upload_message.format(
-                            filename_mimetype,
-                            sniffed_mimetype)
-                    ]}
-                )
+        # Archives can declare any format, but only if they're well formed
+        if valid_filetype and subtype in self.archive_mimetypes:
+            # well-formed archives can specify any format they want,
+            # but the file itself is still ZIP
+            best_guess_mimetype = format_mimetype or filename_mimetype or claimed_mimetype
+            resource['mimetype'] = subtype
         else:
             # If the file extension or format matches a generic type,
             # then sniffing should say the same.

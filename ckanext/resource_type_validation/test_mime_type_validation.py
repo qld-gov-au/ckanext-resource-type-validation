@@ -115,6 +115,8 @@ sample_file_rejections = [
     # extension is ZIP, but file isn't really an archive
     ('eicar.com.pdf', 'example.zip', 'PDF'),
     ('eicar.com.pdf', 'example.zip', 'ZIP'),
+    # file is an archive, but shouldn't be treated like one
+    ('example.docx', 'example.docx', 'CSV'),
 ]
 
 
