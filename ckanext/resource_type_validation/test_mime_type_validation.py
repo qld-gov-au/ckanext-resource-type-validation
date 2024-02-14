@@ -117,6 +117,11 @@ sample_file_rejections = [
     ('eicar.com.pdf', 'example.zip', 'ZIP'),
 ]
 
+sample_links = [
+    'http://example.com/foo.csv',
+    'http://ckan:5000/dataset/foo'
+]
+
 
 class TestMimeTypeValidation(unittest.TestCase):
     """ Test that potential MIME type candidates are correctly coalesced
@@ -125,7 +130,7 @@ class TestMimeTypeValidation(unittest.TestCase):
 
     def setUp(self):
         self.validator = ResourceTypeValidator()
-        self.validator.configure({})
+        self.validator.configure({'ckan.site_url': 'http://ckan:5000/'})
 
     def test_equal_types(self):
         """ Test that equal types are treated as interchangeable.
@@ -229,9 +234,10 @@ class TestMimeTypeValidation(unittest.TestCase):
         """ Test that link-type resources do not have their file types
         validated, since they're not under our control.
         """
-        resource = {'url': 'http://example.com/foo.csv', 'format': 'PDF'}
-        self.validator.validate_resource_mimetype(resource)
-        self.assertIsNone(resource.get('mimetype'))
+        for url in sample_links:
+            resource = {'url': url, 'format': 'HTML'}
+            self.validator.validate_resource_mimetype(resource)
+            self.assertIsNone(resource.get('mimetype'))
 
     # Test error messages
 
