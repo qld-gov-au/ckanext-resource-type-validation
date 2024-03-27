@@ -51,6 +51,7 @@
         ["application/x-cdf", "application/x-netcdf"],
         ["application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"],
         ["application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"],
+        ["application/vnd.openxmlformats-officedocument.presentationml.presentation", "application/vnd.ms-powerpoint"],
         ["application/msaccess", "application/x-msaccess", "application/vnd.msaccess", "application/vnd.ms-access", "application/mdb", "application/x-mdb"],
         ["application/CDFV2", "application/CDFV2-unknown"],
         ["application/x-sqlite3" ,"application/vnd.sqlite3"]

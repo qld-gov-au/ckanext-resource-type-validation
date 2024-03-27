@@ -89,6 +89,7 @@ sample_files = [
      ['application/msaccess', 'application/x-msaccess']),
     ('example.nc', 'NC', ['application/x-cdf', 'application/x-netcdf']),
     ('example.ppt', 'PPT', 'application/vnd.ms-powerpoint'),
+    ('mixed-types-example.ppt', 'PPT', 'application/vnd.ms-powerpoint'),
     ('sample.pptx', 'PPTX', 'application/'
      'vnd.openxmlformats-officedocument.presentationml.presentation'),
     ('example.rdf', 'RDF', 'application/rdf+xml'),
