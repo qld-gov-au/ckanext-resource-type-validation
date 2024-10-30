@@ -26,7 +26,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ckan-version: ["2.11", "2.10", 2.9]
+        ckan-version: ["2.10", 2.9]
+        # 2.11 has problems with recognising the IResourceController interface
+        #ckan-version: ["2.11", "2.10", 2.9]
 
     name: Test on CKAN ${{ matrix.ckan-version }}
     runs-on: ubuntu-latest
