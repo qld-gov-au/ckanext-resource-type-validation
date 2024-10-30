@@ -67,7 +67,9 @@ commands:
 
   logs:
     usage: Show Docker logs.
-    cmd: sh bin/docker-compose.sh logs "$@"
+    cmd: |
+        ahoy title "Output logs"
+        sh bin/docker-compose.sh logs "$@"
 
   pull:
     usage: Pull latest docker images.
