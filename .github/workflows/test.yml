@@ -12,8 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.x'
       - name: Install requirements
@@ -26,16 +26,20 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ckan-version: ["2.10", 2.9, 2.9-py2, 2.8]
+        ckan-version: ["2.10", 2.9]
 
     name: Test on CKAN ${{ matrix.ckan-version }}
     runs-on: ubuntu-latest
-    container: drevops/ci-builder:23.7.0
+    container: drevops/ci-runner:23.12.0
     env:
       CKAN_VERSION: ${{ matrix.ckan-version }}
 
     steps:
-      - uses: actions/checkout@v3
+      # Patch https://github.com/actions/runner/issues/863
+      - name: Preserve $HOME set in the container
+        run: echo HOME=/root >> "$GITHUB_ENV"
+
+      - uses: actions/checkout@v4
         timeout-minutes: 2
 
       - name: Build
@@ -44,16 +48,21 @@ jobs:
 
       - name: Test
         run: bin/test.sh
-        timeout-minutes: 30
+        timeout-minutes: 15
+
+      - name: Retrieve logs
+        if: always()
+        run: ahoy logs
+        timeout-minutes: 1
 
       - name: Retrieve screenshots
-        if: failure()
+        if: always()
         run: bin/process-artifacts.sh
         timeout-minutes: 1
 
       - name: Upload screenshots
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: CKAN ${{ matrix.ckan-version }} screenshots
           path: /tmp/artifacts/behave/screenshots

@@ -43,36 +43,31 @@ add_user_if_needed test_org_member "Test Member" test_org_member@localhost
 
 echo "Creating ${TEST_ORG_TITLE} organisation:"
 
+api_call () {
+    wget -O - --header="Authorization: ${API_KEY}" --post-data "$1" ${CKAN_ACTION_URL}/$2
+}
+
 TEST_ORG=$( \
-    curl -LsH "Authorization: ${API_KEY}" \
-    --data '{"name": "'"${TEST_ORG_NAME}"'", "title": "'"${TEST_ORG_TITLE}"'",
-        "description": "Organisation for testing issues"}' \
-    ${CKAN_ACTION_URL}/organization_create
+    api_call '{"name": "'"${TEST_ORG_NAME}"'", "title": "'"${TEST_ORG_TITLE}"'",
+        "description": "Organisation for testing issues"}' organization_create
 )
 
 TEST_ORG_ID=$(echo $TEST_ORG | $PYTHON ${APP_DIR}/bin/extract-id.py)
 
 echo "Assigning test users to '${TEST_ORG_TITLE}' organisation (${TEST_ORG_ID}):"
 
-curl -LsH "Authorization: ${API_KEY}" \
-    --data '{"id": "'"${TEST_ORG_ID}"'", "object": "test_org_admin", "object_type": "user", "capacity": "admin"}' \
-    ${CKAN_ACTION_URL}/member_create
+api_call '{"id": "'"${TEST_ORG_ID}"'", "object": "test_org_admin", "object_type": "user", "capacity": "admin"}' member_create
 
-curl -LsH "Authorization: ${API_KEY}" \
-    --data '{"id": "'"${TEST_ORG_ID}"'", "object": "test_org_editor", "object_type": "user", "capacity": "editor"}' \
-    ${CKAN_ACTION_URL}/member_create
+api_call '{"id": "'"${TEST_ORG_ID}"'", "object": "test_org_editor", "object_type": "user", "capacity": "editor"}' member_create
 
-curl -LsH "Authorization: ${API_KEY}" \
-    --data '{"id": "'"${TEST_ORG_ID}"'", "object": "test_org_member", "object_type": "user", "capacity": "member"}' \
-    ${CKAN_ACTION_URL}/member_create
+api_call '{"id": "'"${TEST_ORG_ID}"'", "object": "test_org_member", "object_type": "user", "capacity": "member"}' member_create
+
 ##
 # END.
 #
 
 # Creating basic test data which has datasets with resources
-curl -LsH "Authorization: ${API_KEY}" \
-    --data '{"name": "warandpeace", "owner_org": "'"${TEST_ORG_ID}"'",
-"author_email": "admin@localhost", "license_id": "other-open", "notes": "test"}' \
-    ${CKAN_ACTION_URL}/package_create
+api_call '{"name": "warandpeace", "owner_org": "'"${TEST_ORG_ID}"'",
+"author_email": "admin@localhost", "license_id": "other-open", "notes": "test"}' package_create
 
 . ${APP_DIR}/bin/deactivate
