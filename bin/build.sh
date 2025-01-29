@@ -14,8 +14,8 @@ sed -i -e "s/##//" docker-compose.yml
 # Pull the latest images.
 ahoy pull
 
+PYTHON=python3
 PYTHON_VERSION=py3
-PYTHON="python3"
 
 sed "s|{CKAN_VERSION}|$CKAN_VERSION|g" .docker/Dockerfile-template.ckan \
     | sed "s|{PYTHON_VERSION}|$PYTHON_VERSION|g" \

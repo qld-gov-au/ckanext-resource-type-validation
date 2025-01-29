@@ -9,7 +9,7 @@ CKAN_USER_NAME="${CKAN_USER_NAME:-admin}"
 CKAN_DISPLAY_NAME="${CKAN_DISPLAY_NAME:-Administrator}"
 CKAN_USER_EMAIL="${CKAN_USER_EMAIL:-admin@localhost}"
 
-. ${APP_DIR}/bin/activate
+. "${APP_DIR}"/bin/activate
 
 add_user_if_needed () {
     echo "Adding user '$2' ($1) with email address [$3]"
@@ -17,6 +17,10 @@ add_user_if_needed () {
         fullname="$2"\
         email="$3"\
         password="${4:-Password123!}"
+}
+
+api_call () {
+    wget -O - --header="Authorization: ${API_KEY}" --post-data "$1" ${CKAN_ACTION_URL}/$2
 }
 
 add_user_if_needed "$CKAN_USER_NAME" "$CKAN_DISPLAY_NAME" "$CKAN_USER_EMAIL"
@@ -43,16 +47,12 @@ add_user_if_needed test_org_member "Test Member" test_org_member@localhost
 
 echo "Creating ${TEST_ORG_TITLE} organisation:"
 
-api_call () {
-    wget -O - --header="Authorization: ${API_KEY}" --post-data "$1" ${CKAN_ACTION_URL}/$2
-}
-
 TEST_ORG=$( \
     api_call '{"name": "'"${TEST_ORG_NAME}"'", "title": "'"${TEST_ORG_TITLE}"'",
         "description": "Organisation for testing issues"}' organization_create
 )
 
-TEST_ORG_ID=$(echo $TEST_ORG | $PYTHON ${APP_DIR}/bin/extract-id.py)
+TEST_ORG_ID=$(echo $TEST_ORG | $PYTHON "${APP_DIR}"/bin/extract-id.py)
 
 echo "Assigning test users to '${TEST_ORG_TITLE}' organisation (${TEST_ORG_ID}):"
 
@@ -70,4 +70,4 @@ api_call '{"id": "'"${TEST_ORG_ID}"'", "object": "test_org_member", "object_type
 api_call '{"name": "warandpeace", "owner_org": "'"${TEST_ORG_ID}"'",
 "author_email": "admin@localhost", "license_id": "other-open", "notes": "test"}' package_create
 
-. ${APP_DIR}/bin/deactivate
+. "${APP_DIR}"/bin/deactivate
