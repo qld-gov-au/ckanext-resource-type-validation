@@ -8,4 +8,5 @@ ahoy lint
 
 ahoy test-unit
 
+ahoy install-site
 ahoy test-bdd
