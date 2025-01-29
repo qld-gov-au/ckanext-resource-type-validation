@@ -7,5 +7,5 @@ Feature: Resource type validation
         And I open the new resource form for dataset "$last_generated_name"
         And I fill in default resource fields
         And I upload "eicar.com.pdf" of type "PDF" to resource
-        And I press the element with xpath "//form[contains(@class, 'resource-form')]//button[contains(@class, 'btn-primary')]"
+        And I press the element with xpath "//form[contains(@data-module, 'resource-form')]//button[contains(@class, 'btn-primary')]"
         Then I should see "Mismatched file type"
