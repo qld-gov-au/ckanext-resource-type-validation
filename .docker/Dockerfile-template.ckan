@@ -1,19 +1,16 @@
-FROM openknowledge/ckan-dev:{CKAN_VERSION}
+FROM ckan/ckan-dev:{CKAN_VERSION}
 
 ARG SITE_URL=http://ckan:5000/
 ENV PYTHON_VERSION={PYTHON_VERSION}
+ENV CKAN_VERSION={CKAN_VERSION}
 ENV CKAN_SITE_URL="${SITE_URL}"
 ENV PYTHON={PYTHON}
 
 WORKDIR "${APP_DIR}"
 
 ENV DOCKERIZE_VERSION v0.6.1
-RUN apk add --no-cache build-base \
-    && curl -sL https://github.com/jwilder/dockerize/releases/download/${DOCKERIZE_VERSION}/dockerize-alpine-linux-amd64-${DOCKERIZE_VERSION}.tar.gz \
+RUN wget -O - https://github.com/jwilder/dockerize/releases/download/${DOCKERIZE_VERSION}/dockerize-linux-amd64-${DOCKERIZE_VERSION}.tar.gz \
         | tar -C /usr/local/bin -xzvf -
-
-# Update urllib3 to fix urlopen bug
-RUN pip install -U urllib3
 
 COPY .docker/test.ini $CKAN_INI
 

@@ -1,11 +1,10 @@
-behave==1.2.6
-behaving==2.0.0
-Appium-Python-Client<=0.52
-ckanapi==4.3
+behaving==3.1.5
+Appium-Python-Client==2.10.1
+ckanapi==4.7
 ckantoolkit>=0.0.4
 factory-boy
-flake8==3.8.3
+flake8==6.0.0
 mock
 pytest-ckan
-splinter>=0.13.0,<0.17
+selenium<4.10
 zipp>=3.19.1 # not directly required, pinned by Snyk to avoid a vulnerability
