@@ -88,7 +88,6 @@ class ResourceTypeValidator:
             'ckan.mimetypes_allowed', '*').split(',')
 
     def validate_resource_mimetype(self, resource):
-        LOG.debug("Validating resource [%s] MIME types", resource)
         upload_field_storage = resource.get('upload', None)
         if isinstance(upload_field_storage, ALLOWED_UPLOAD_TYPES) \
                 and upload_field_storage.filename:

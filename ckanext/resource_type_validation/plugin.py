@@ -1,12 +1,8 @@
 # encoding: utf-8
 
-import logging
-
 from ckan import plugins
 
 from .resource_type_validation import ResourceTypeValidator
-
-LOG = logging.getLogger(__name__)
 
 
 class ResourceTypeValidationPlugin(plugins.SingletonPlugin):
@@ -34,11 +30,9 @@ class ResourceTypeValidationPlugin(plugins.SingletonPlugin):
     def before_resource_create(self, context, data_dict):
         """ Check that uploads have an acceptable mime type.
         """
-        LOG.debug("Validating provided types for new resource")
         self.validator.validate_resource_mimetype(data_dict)
 
     def before_resource_update(self, context, current, data_dict):
         """ Check that uploads have an acceptable mime type.
         """
-        LOG.debug("Validating provided types for updated resource")
         self.validator.validate_resource_mimetype(data_dict)
