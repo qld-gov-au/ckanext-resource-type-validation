@@ -7,3 +7,4 @@ flake8==6.0.0
 mock
 pytest-ckan
 selenium<4.10
+zipp>=3.19.1 # not directly required, pinned by Snyk to avoid a vulnerability

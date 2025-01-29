@@ -12,7 +12,6 @@ commands:
       ahoy clean
       ahoy build-network
       ahoy up -- --build --force-recreate
-      ahoy install-site
       ahoy title "Build complete"
       ahoy doctor
       ahoy info 1
@@ -39,9 +38,17 @@ commands:
       ahoy title "Building and starting Docker containers"
       sh bin/docker-compose.sh up -d "$@"
       echo "Initialising database schema"
-      ahoy cli '$APP_DIR/bin/init.sh'
+      ahoy cli '"${APP_DIR}"/bin/init.sh'
       echo "Waiting for containers to start listening..."
-      ahoy cli "dockerize -wait tcp://ckan:5000 -timeout 1m"
+      for i in `seq 1 60`; do
+        if (ahoy cli "timeout 1 bash -c 'cat < /dev/null > /dev/tcp/ckan/5000'"); then
+          echo "CKAN became ready on attempt $i"
+          break
+        else
+          echo "CKAN not yet ready, retrying (attempt $i)..."
+          sleep 1
+        fi
+      done
       if sh bin/docker-compose.sh logs | grep -q "\[Error\]"; then exit 1; fi
       if sh bin/docker-compose.sh logs | grep -q "Exception"; then exit 1; fi
       docker ps -a --filter name=^/${COMPOSE_PROJECT_NAME}_
@@ -69,7 +76,13 @@ commands:
     usage: Show Docker logs.
     cmd: |
         ahoy title "Output logs"
-        sh bin/docker-compose.sh logs "$@"
+        # Loop through each container and wrap with github log groups
+        services=$(bin/docker-compose.sh ps --services)
+        for service in $services; do
+          echo "::group::$service"
+          sh bin/docker-compose.sh logs "$service"
+          echo "::endgroup::"
+        done
 
   pull:
     usage: Pull latest docker images.
@@ -80,9 +93,9 @@ commands:
     cmd: |
       CKAN_CONTAINER=$(sh bin/docker-compose.sh ps -q ckan)
       if [ "${#}" -ne 0 \]; then
-        docker exec $CKAN_CONTAINER sh -c '. ${APP_DIR}/bin/activate; cd $APP_DIR;'" $*"
+        docker exec $CKAN_CONTAINER sh -c '. "${APP_DIR}"/bin/activate; cd $APP_DIR;'" $*"
       else
-        docker exec $CKAN_CONTAINER sh -c '. ${APP_DIR}/bin/activate && cd $APP_DIR && sh'
+        docker exec $CKAN_CONTAINER sh -c '. "${APP_DIR}"/bin/activate && cd $APP_DIR && sh'
       fi
 
   doctor:
@@ -93,7 +106,7 @@ commands:
     usage: Install test site data.
     cmd: |
       ahoy title "Installing a fresh site"
-      ahoy cli '$APP_DIR/bin/init.sh'
+      ahoy cli '"${APP_DIR}"/bin/init.sh && "${APP_DIR}"/bin/create-test-data.sh'
 
   clean:
     usage: Remove containers and all build files.
@@ -129,13 +142,13 @@ commands:
     cmd: |
       docker cp . $(sh bin/docker-compose.sh ps -q ckan):/srv/app/
       docker cp bin/ckan_cli $(sh bin/docker-compose.sh ps -q ckan):/usr/bin/
-      ahoy cli 'chmod -v u+x /usr/bin/ckan_cli $APP_DIR/bin/*; cp -v .docker/test.ini $CKAN_INI'
+      ahoy cli 'chmod -v u+x /usr/bin/ckan_cli "${APP_DIR}"/bin/*; cp -v .docker/test.ini $CKAN_INI'
 
   test-unit:
     usage: Run unit tests.
     cmd: |
       ahoy title 'Run unit tests'
-      ahoy cli 'pytest --ckan-ini=${CKAN_INI} $APP_DIR/ckanext' || \
+      ahoy cli 'pytest --ckan-ini=${CKAN_INI} "${APP_DIR}"/ckanext --junit-xml=test/junit/results.xml' || \
       [ "${ALLOW_UNIT_FAIL:-0}" -eq 1 ]
 
   test-bdd:
@@ -146,7 +159,8 @@ commands:
       ahoy start-ckan-job-worker &
       ahoy start-mailmock &
       sleep 5
-      ahoy cli "behave -k ${*:-test/features} --tags=-comment-report" || \
+      JUNIT_OUTPUT="--junit --junit-directory=test/junit/"
+      ahoy cli "behave $JUNIT_OUTPUT -k ${*:-test/features} --tags=-comment-report" || \
       [ "${ALLOW_BDD_FAIL:-0}" -eq 1 ]
       ahoy stop-mailmock
       ahoy stop-ckan-job-worker
@@ -155,7 +169,7 @@ commands:
     usage: Starts email mock server used for email BDD tests
     cmd: |
       ahoy title 'Starting mailmock'
-      ahoy cli 'mailmock -p 8025 -o ${APP_DIR}/test/emails' # for debugging mailmock email output remove --no-stdout
+      ahoy cli 'mailmock -p 8025 -o "${APP_DIR}"/test/emails' # for debugging mailmock email output remove --no-stdout
 
   stop-mailmock:
     usage: Stops email mock server used for email BDD tests
