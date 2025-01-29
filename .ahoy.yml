@@ -188,7 +188,7 @@ commands:
     usage: Stops CKAN background job worker
     cmd: |
       ahoy title 'Stopping CKAN background job worker'
-      ahoy cli "pkill -f 'jobs worker'"
+      ahoy cli "(pgrep 'jobs worker' && pkill -f 'jobs worker') || true"
 
   # Utilities.
   title:
