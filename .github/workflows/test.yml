@@ -12,8 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.x'
       - name: Install requirements
@@ -26,35 +26,67 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ckan-version: ["2.10", 2.9, 2.9-py2, 2.8]
+        ckan-version: ["2.10", 2.9]
+        solr-version: ["8"]
+        experimental: [false]
+        include:
+          - ckan-version: '2.11'
+            solr-version: "9"
+            experimental: true  # 2.11 has problems with recognising the IResourceController interface
+          - ckan-version: 'master'
+            solr-version: "9"
+            experimental: true  # master is unstable, good to know if we are compatible or not
 
     name: Test on CKAN ${{ matrix.ckan-version }}
     runs-on: ubuntu-latest
-    container: drevops/ci-builder:23.7.0
+    container: drevops/ci-runner:23.12.0
     env:
       CKAN_VERSION: ${{ matrix.ckan-version }}
+      SOLR_VERSION: ${{ matrix.solr-version }}
 
     steps:
-      - uses: actions/checkout@v3
+      # Patch https://github.com/actions/runner/issues/863
+      - name: Preserve $HOME set in the container
+        run: echo HOME=/root >> "$GITHUB_ENV"
+
+      - uses: actions/checkout@v4
+        continue-on-error: ${{ matrix.experimental }}
         timeout-minutes: 2
 
       - name: Build
         run: bin/build.sh
         timeout-minutes: 15
+        continue-on-error: ${{ matrix.experimental }}
 
       - name: Test
         run: bin/test.sh
-        timeout-minutes: 30
+        timeout-minutes: 15
+        continue-on-error: ${{ matrix.experimental }}
 
-      - name: Retrieve screenshots
-        if: failure()
+      - name: Retrieve logs
+        if: always()
+        run: ahoy logs
+        timeout-minutes: 1
+        continue-on-error: ${{ matrix.experimental }}
+
+      - name: Retrieve results
+        if: always()
         run: bin/process-artifacts.sh
         timeout-minutes: 1
+        continue-on-error: ${{ matrix.experimental }}
+
+      - name: Test Summary
+        uses: test-summary/action@v2
+        continue-on-error: ${{ matrix.experimental }}
+        with:
+          paths: "/tmp/artifacts/junit/*.xml"
+        if: always()
 
       - name: Upload screenshots
-        if: failure()
-        uses: actions/upload-artifact@v3
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
           name: CKAN ${{ matrix.ckan-version }} screenshots
           path: /tmp/artifacts/behave/screenshots
         timeout-minutes: 1
+        continue-on-error: ${{ matrix.experimental }}
