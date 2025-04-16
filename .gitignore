@@ -133,3 +133,5 @@ dmypy.json
 
 # Generated
 Dockerfile.ckan
+
+node_modules

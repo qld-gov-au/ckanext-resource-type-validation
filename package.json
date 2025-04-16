@@ -1,0 +1,24 @@
+{
+  "name": "ckanext-resource-type-validaton",
+  "version": "1.0.0",
+  "description": "CKAN: The Open Source Data Portal Software ==========================================",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "pyright": "^1.1.392"
+  },
+  "scripts": {
+    "test": "pyright"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qld-gov-au/ckanext-resource-type-validation.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/qld-gov-au/ckanext-resource-type-validation/issues"
+  },
+  "homepage": "https://github.com/qld-gov-au/ckanext-resource-type-validation"
+}

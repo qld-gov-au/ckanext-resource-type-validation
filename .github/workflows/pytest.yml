@@ -55,7 +55,7 @@ jobs:
         if: always()
         run: bin/process-artifacts.sh
         timeout-minutes: 1
-        continue-on-error: ${{ matrix.experimental }}
+        continue-on-error: true #don't fail if we can't upload (ie a fork that does not have integration plugged in)
 
       - name: Test Summary
         uses: test-summary/action@v2
@@ -71,51 +71,12 @@ jobs:
           name: CKAN ${{ matrix.ckan-version }} screenshots
           path: /tmp/artifacts/behave/screenshots
         timeout-minutes: 1
-        continue-on-error: ${{ matrix.experimental }}
-
-      - name: Pytest Coverage Console Report
-        if: ${{ !cancelled() }}
-        run: |
-          set -ex
-          ahoy cli "coverage report -m"
+        continue-on-error: true
 
       - name: Upload HTML coverage report
         uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
+        continue-on-error: true
         with:
           name: combined-test-coverage-reports-${{ matrix.ckan-version }}
-          path: results
-
-      - name: ${{ matrix.experimental && '**Fail_Ignored** ' || '' }} Test Summary
-        uses: test-summary/action@v2
-        continue-on-error: ${{ matrix.experimental }}
-        with:
-          paths: "results/results.xml"
-        if: ${{ !cancelled() }}
-
-
-      - name: Install packages required for codecov
-        if: ${{ !cancelled() }}
-        run: |
-          #ubuntu based images    
-          apt-get install -y --no-install-recommends curl gpg
-
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v5
-        if: ${{ !cancelled() }}
-        continue-on-error: true #don't fail if we can't upload (ie a fork that does not have integration plugged in)
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./results/coverage.xml
-          verbose: false # optional (default = false)
-
-
-      - name: Upload test results to Codecov
-        uses: codecov/test-results-action@v1
-        if: ${{ !cancelled() }}
-        continue-on-error: true #don't fail if we can't upload (ie a fork that does not have integration plugged in)
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./results/results.xml
-          verbose: false # optional (default = false)
-
+          path: /tmp/artifacts
