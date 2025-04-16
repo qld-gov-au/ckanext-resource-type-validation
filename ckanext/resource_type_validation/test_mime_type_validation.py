@@ -261,7 +261,7 @@ class TestMimeTypeValidation(unittest.TestCase):
                 If you continue to have problems, contact the site owner.''')
         )
 
-        self.validator.configure({
+        self.validator = ResourceTypeValidator({
             'ckanext.resource_validation.support_contact':
                 'the Ministry of Silly Walks.'
         })
