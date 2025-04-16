@@ -19,7 +19,6 @@ jobs:
     container: drevops/ci-runner:23.12.0
     env:
       CKAN_VERSION: ${{ matrix.ckan-version }}
-      SOLR_VERSION: ${{ matrix.solr-version }}
 
     steps:
       # Patch https://github.com/actions/runner/issues/863
@@ -74,13 +73,13 @@ jobs:
         continue-on-error: true
         with:
           name: combined-test-coverage-reports-${{ matrix.ckan-version }}
-          path: /tmp/artifacts/results
+          path: /tmp/artifacts/junit
 
       - name: Test Summary
         uses: test-summary/action@v2
         continue-on-error: true
         with:
-          paths: "/tmp/artifacts/results/results.xml"
+          paths: "/tmp/artifacts/junit/results.xml"
         if: ${{ !cancelled() }}
 
       - name: Install packages required for codecov
@@ -96,7 +95,7 @@ jobs:
         continue-on-error: true
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: /tmp/artifacts/results/coverage.xml
+          files: /tmp/artifacts/junit/coverage.xml
           verbose: false # optional (default = false)
 
       - name: Upload test results to Codecov
@@ -105,6 +104,6 @@ jobs:
         continue-on-error: true #don't fail if we can't upload (ie a fork that does not have integration plugged in)
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: /tmp/artifacts/results/results.xml
+          files: /tmp/artifacts/junit/results.xml
           verbose: false # optional (default = false)
 
