@@ -3,6 +3,7 @@
 from typing import Any
 
 from ckan import plugins
+from ckan.common import CKANConfig
 
 from .resource_type_validation import ResourceTypeValidator
 
@@ -19,7 +20,7 @@ class ResourceTypeValidationPlugin(plugins.SingletonPlugin):
 
     # IConfigurable
 
-    def configure(self, config: plugins.toolkit.CKANConfig):
+    def configure(self, config: CKANConfig):
         self.validator = ResourceTypeValidator(config)
 
     # IResourceController

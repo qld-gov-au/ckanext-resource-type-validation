@@ -14,7 +14,8 @@ import typing
 
 from ckan.lib.uploader import ALLOWED_UPLOAD_TYPES
 from ckan.logic import ValidationError
-from ckan.plugins import toolkit as tk
+from ckan.common import CKANConfig
+
 from werkzeug.datastructures import FileStorage as FlaskFileStorage
 
 LOG = getLogger(__name__)
@@ -44,7 +45,7 @@ class ResourceTypeValidator:
     mismatching_upload_message: str
     generic_mimetypes: 'list[str]'
 
-    def __init__(self, config: tk.CKANConfig):
+    def __init__(self, config: CKANConfig):
         types_file_name = config.get(
             'ckanext.resource_validation.types_file',
             os.path.join(os.path.dirname(__file__),
