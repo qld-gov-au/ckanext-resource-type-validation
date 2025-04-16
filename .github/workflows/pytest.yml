@@ -8,15 +8,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ckan-version: ['2.10', 2.9]
-        solr-version: ['8']
+        ckan-version: ['2.11', '2.10', 2.9]
         experimental: [false]
         include:
-          - ckan-version: '2.11'
-            solr-version: '9'
-            experimental: false
           - ckan-version: 'master'
-            solr-version: '9'
             experimental: true  # master is unstable, good to know if we are compatible or not
 
     name: ${{ matrix.experimental && '**Fail_Ignored** ' || '' }} CKAN ${{ matrix.ckan-version }}
@@ -57,13 +52,6 @@ jobs:
         timeout-minutes: 1
         continue-on-error: true #don't fail if we can't upload (ie a fork that does not have integration plugged in)
 
-      - name: Test Summary
-        uses: test-summary/action@v2
-        continue-on-error: ${{ matrix.experimental }}
-        with:
-          paths: "/tmp/artifacts/junit/*.xml"
-        if: always()
-
       - name: Upload screenshots
         if: always()
         uses: actions/upload-artifact@v4
@@ -94,7 +82,6 @@ jobs:
         with:
           paths: "/tmp/artifacts/results/results.xml"
         if: ${{ !cancelled() }}
-
 
       - name: Install packages required for codecov
         if: ${{ !cancelled() }}
