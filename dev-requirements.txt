@@ -9,8 +9,7 @@ mock
 pytest
 pytest-cov
 pytest-ckan
-coverage==7.7.1
-junit2html==31.0.2
+pytest-html
 requests>=2.32.0 # not directly required, pinned by Snyk to avoid a vulnerability
 selenium<4.10
 urllib3>=2.2.2 # not directly required, pinned by Snyk to avoid a vulnerability

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ckanext-resource-type-validation"
-version = "1.0.5"
+version = "1.0.11"
 description = "Apply stricter validation to CKAN resource formats"
 classifiers = [ "Development Status :: 5 - Production/Stable",
     "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
