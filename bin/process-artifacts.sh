@@ -2,7 +2,7 @@
 ##
 # Process test artifacts.
 #
-set -e
+set -ex
 
 # Create screenshots directory in case it was not created before. This is to
 # avoid this script to fail when copying artifacts.
