@@ -1,0 +1,57 @@
+name: Check types
+on:
+#  pull_request:
+  workflow_call:
+  workflow_dispatch:
+env:
+  NODE_VERSION: '18'
+  PYTHON_VERSION: '3.9'
+
+permissions:
+  contents: read
+
+jobs:
+  typecheck:
+    strategy:
+      matrix:
+        include: #ckan-image see https://github.com/ckan/ckan-docker-base, ckan-version controls other image tags
+          - ckan-version: "dev-v2.11"
+            experimental: false
+          - ckan-version: "dev-v2.10"
+            experimental: false
+          - ckan-version: "master"
+            experimental: true  # master is unstable, good to know if we are compatible or not
+      fail-fast: false
+
+    name: ${{ matrix.experimental && '**Fail_Ignored** ' || '' }} Check types ${{ matrix.ckan-version }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: checkout ckan
+        uses: actions/checkout@v4
+        with:
+          repository: ckan/ckan
+          ref: ${{ matrix.ckan-version }}
+          path: ckan
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install python deps
+        run: | 
+          pip list
+          pip install -r ckan/requirements.txt -r ckan/dev-requirements.txt ckan/.
+          pip install -r requirements.txt -r dev-requirements.txt -e. 
+
+      - name: Install node deps
+        run: npm ci
+
+      - name: Check types
+        run: |
+          npx pyright

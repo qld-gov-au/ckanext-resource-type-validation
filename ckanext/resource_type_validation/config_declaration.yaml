@@ -1,0 +1,22 @@
+version: 1
+groups:
+  - annotation: ckanext-resource-type-validation settings
+    options:
+      - key: ckanext.resource_validation.types_file
+        example: /path/to/resource_types.json
+        description: |
+          Path to the configuration file for specifying file types and their
+          relationships. Defaults to built-in resource_types.json
+        required: false
+      - key: ckanext.resource_validation.support_contact
+        example: "webmaster@example.com"
+        description: |
+          Support contact to list in any error messages.
+          Defaults to 'the site owner.'
+        required: false
+      - key: ckan.mimetypes_allowed
+        example: "application/pdf,text/plain,text/xml"
+        description: |
+          Whitelist of allowed mimetypes. 
+          Defaults to '*'
+        required: false
