@@ -41,9 +41,14 @@ for extension in . `ls -d $SRC_DIR/ckanext-*`; do
     install_requirements $extension requirements pip-requirements
 done
 pip install -e .
-installed_name=$(grep '^\s*name=' setup.py |sed "s|[^']*'\([-a-zA-Z0-9]*\)'.*|\1|")
+installed_name=$(grep '^\s*name\s*=' pyproject.toml | sed 's|[^"]*"\([-a-zA-Z0-9]*\)".*|\1|')
 
 # Validate that the extension was installed correctly.
 if ! pip list | grep "$installed_name" > /dev/null; then echo "Unable to find the extension in the list"; exit 1; fi
 
-. "${APP_DIR}"/bin/deactivate
+if [ "$CKAN_VERSION" = "2.9" ]; then
+    pip install "jinja2<3.1"
+fi
+
+
+. "${APP_DIR}"/bin/deactivate || echo "deactivate failure, continuing"

@@ -1,27 +1,17 @@
-from setuptools import setup, find_packages
+# -*- coding: utf-8 -*-
+from setuptools import setup
 
-version = '1.0.5'
 
 setup(
-    name='ckanext-resource-type-validation',
-    version=version,
-    description='Apply stricter validation to CKAN resource formats',
-    long_description="""Ensure that uploaded resources have matching filenames,\
-formats, and file contents""",
-    classifiers=[],
-    keywords='',
-    author='Queensland Online',
-    author_email='qol.development@smartservice.qld.gov.au',
-    url='',
-    license='',
-    packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
-    namespace_packages=['ckanext'],
-    include_package_data=True,
-    zip_safe=False,
-    install_requires=[],
-    entry_points="""
-    [ckan.plugins]
-    resource_type_validation=\
-ckanext.resource_type_validation.plugin:ResourceTypeValidationPlugin
-    """,
+    # If you are changing from the default layout of your extension, you may
+    # have to change the message extractors, you can read more about babel
+    # message extraction at
+    # http://babel.pocoo.org/docs/messages/#extraction-method-mapping-and-configuration
+    message_extractors={
+        'ckanext': [
+            ('**.py', 'python', None),
+            ('**.js', 'javascript', None),
+            ('**/templates/**.html', 'ckan', None),
+        ],
+    }
 )

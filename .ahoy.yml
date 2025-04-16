@@ -148,7 +148,7 @@ commands:
     usage: Run unit tests.
     cmd: |
       ahoy title 'Run unit tests'
-      ahoy cli 'pytest --ckan-ini=${CKAN_INI} "${APP_DIR}"/ckanext --junit-xml=test/junit/results.xml' || \
+      ahoy cli 'pytest --ckan-ini=${CKAN_INI} "${APP_DIR}"/ckanext --cov=ckanext.resource_type_validation --cov-branch --cov-report=xml:test/junit/coverage.xml --cov-report=html:test/junit/coverage_html --junit-xml=test/junit/results.xml' -o junit_family=legacy --html=test/junit/report.html --self-contained-html || \
       [ "${ALLOW_UNIT_FAIL:-0}" -eq 1 ]
 
   test-bdd:
