@@ -1,7 +1,9 @@
+[![PyPI version](https://img.shields.io/pypi/v/ckanext-resource-type-validation)](https://pypi.org/project/ckanext-resource-type-validation/) 
+![License](https://img.shields.io/pypi/l/ckanext-resource-type-validation)
+![Python versions](https://img.shields.io/pypi/pyversions/ckanext-resource-type-validation)
 [![Tests](https://github.com/qld-gov-au/ckanext-resource-type-validation/actions/workflows/test.yml/badge.svg)](https://github.com/qld-gov-au/ckanext-resource-type-validation/actions/workflows/test.yml)
-=============
-ckanext-resource-type-validation
-=============
+
+# ckanext-resource-type-validation
 
 Overview
 --------
@@ -24,6 +26,19 @@ This affects only uploaded resources. URL resources are not validated.
 See [the configuration file](https://github.com/qld-gov-au/ckanext-resource-type-validation/blob/main/ckanext/resource_type_validation/resources/resource_types.json)
 for more details.
 
+## Requirements
+
+Compatibility with core CKAN versions:
+
+  | CKAN version   | Compatibility       |
+  | -------------- |---------------------|
+  | 2.7            | no longer supported |
+  | 2.8            | no longer supported |
+  | 2.9            | yes                 |
+  | 2.10           | yes                 |
+  | 2.11           | yes                 |
+
+
 Installation
 ------------
 
@@ -39,6 +54,12 @@ To install ``ckanext-resource-type-validation``:
 
 1. Install the extension into your virtual environment:
 
+    ```
+    pip install ckanext-resource-type-validation 
+    pip install -r $SRC_DIR/ckanext-resource-type-validation/requirements.txt
+
+    ```
+   developer install
     ```
     git clone https://github.com/qld-gov-au/ckanext-resource-type-validation.git
     cd ckanext-resource-type-validation
