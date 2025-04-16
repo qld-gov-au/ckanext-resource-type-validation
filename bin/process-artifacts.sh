@@ -16,6 +16,6 @@ echo "make html junit/coverage reports next"
 ahoy cli "junit2html test/junit/results.xml test/junit/pytest-results.html"
 ahoy cli "coverage html -d test/junit/coverage_html"
 
-ahoy cli "coverage report xml -o test/junit/coverage.xml"
+ahoy cli "coverage xml -o test/junit/coverage.xml"
 
 docker cp "$(sh bin/docker-compose.sh ps -q ckan)":/srv/app/test/junit /tmp/artifacts/

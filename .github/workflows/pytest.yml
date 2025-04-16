@@ -86,13 +86,13 @@ jobs:
         continue-on-error: true
         with:
           name: combined-test-coverage-reports-${{ matrix.ckan-version }}
-          path: results
+          path: /tmp/artifacts/results
 
       - name: Test Summary
         uses: test-summary/action@v2
         continue-on-error: true
         with:
-          paths: "results/results.xml"
+          paths: "/tmp/artifacts/results/results.xml"
         if: ${{ !cancelled() }}
 
 
@@ -100,7 +100,7 @@ jobs:
         if: ${{ !cancelled() }}
         continue-on-error: true
         run: |
-          #ubuntu based images    
+          # ubuntu based images
           apt-get install -y --no-install-recommends curl gpg
 
       - name: Upload coverage reports to Codecov
@@ -109,9 +109,8 @@ jobs:
         continue-on-error: true
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./results/coverage.xml
+          files: /tmp/artifacts/results/coverage.xml
           verbose: false # optional (default = false)
-
 
       - name: Upload test results to Codecov
         uses: codecov/test-results-action@v1
@@ -119,6 +118,6 @@ jobs:
         continue-on-error: true #don't fail if we can't upload (ie a fork that does not have integration plugged in)
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./results/results.xml
+          files: /tmp/artifacts/results/results.xml
           verbose: false # optional (default = false)
 

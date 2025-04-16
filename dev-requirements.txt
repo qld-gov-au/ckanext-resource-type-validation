@@ -3,8 +3,10 @@ Appium-Python-Client==2.10.1
 ckanapi==4.7
 ckan
 ckantoolkit>=0.0.4
+coverage==7.7.*
 factory-boy
 flake8==6.0.0
+junit2html==31.0.*
 mock
 pytest
 pytest-cov
