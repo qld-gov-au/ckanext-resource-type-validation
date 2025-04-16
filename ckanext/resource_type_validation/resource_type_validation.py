@@ -10,9 +10,11 @@ import mimetypes
 import os
 import re
 import six
+import typing
 
 from ckan.lib.uploader import ALLOWED_UPLOAD_TYPES
 from ckan.logic import ValidationError
+from ckan.plugins import toolkit as tk
 from werkzeug.datastructures import FileStorage as FlaskFileStorage
 
 LOG = getLogger(__name__)
@@ -20,19 +22,29 @@ LOG = getLogger(__name__)
 IS_REMOTE_URL_PATTERN = re.compile(r'^[a-z+]+://')
 
 
-def _get_underlying_file(wrapper):
+def _get_underlying_file(wrapper: 'FlaskFileStorage|typing.Any') -> 'typing.TextIO|typing.IO[bytes]':
     if isinstance(wrapper, FlaskFileStorage):
         return wrapper.stream
     return wrapper.file
 
 
-def normalize_whitespace(text):
+def _cast_to_str(value: typing.Any) -> 'str|None':
+    """ Cast an unknown value to 'str' without converting None to 'None'.
+    """
+    return None if value is None else str(value)
+
+
+def normalize_whitespace(text: str):
     return ' '.join(text.split())
 
 
 class ResourceTypeValidator:
+    allowed_mime_types: 'list[str]'
+    invalid_upload_message: str
+    mismatching_upload_message: str
+    generic_mimetypes: 'list[str]'
 
-    def configure(self, config):
+    def __init__(self, config: tk.CKANConfig):
         types_file_name = config.get(
             'ckanext.resource_validation.types_file',
             os.path.join(os.path.dirname(__file__),
@@ -87,8 +99,14 @@ class ResourceTypeValidator:
         self.allowed_mime_types = config.get(
             'ckan.mimetypes_allowed', '*').split(',')
 
-    def validate_resource_mimetype(self, resource):
-        upload_field_storage = resource.get('upload', None)
+    def validate_resource_mimetype(self, resource: 'dict[str, typing.Any]') -> None:
+        upload_field_storage: typing.Any = resource.get('upload', None)
+        sniffed_mimetype: 'str|None'  # type sniffed from file contents
+        filename: str  # name of the uploaded file
+        filename_mimetype: 'str|None'  # type deduced from file extension
+        format_mimetype: 'str|None'  # type deduced from selected resource format
+        claimed_mimetype: 'str|None'  # type recorded in resource data
+        best_guess_mimetype: 'str|None'  # best type match from coalescing other guesses
         if isinstance(upload_field_storage, ALLOWED_UPLOAD_TYPES) \
                 and upload_field_storage.filename:
             filename = upload_field_storage.filename
@@ -118,7 +136,7 @@ class ResourceTypeValidator:
         else:
             LOG.debug('No upload in progress for %s; just sanity-check',
                       resource.get('id', 'new resource'))
-            filename = resource.get('url')
+            filename = str(resource.get('url'))
             sniffed_mimetype = None
 
         if (self.allowed_extensions_pattern
@@ -127,7 +145,7 @@ class ResourceTypeValidator:
                 {'upload': [self.invalid_upload_message]}
             )
 
-        claimed_mimetype = resource.get('mimetype')
+        claimed_mimetype = _cast_to_str(resource.get('mimetype'))
         LOG.debug("Upload claims to have MIME type %s", claimed_mimetype)
 
         filename_mimetype = mimetypes.guess_type(
@@ -138,9 +156,9 @@ class ResourceTypeValidator:
         # If we're just sanity-checking, set a dummy sniffed type
         sniffed_mimetype = sniffed_mimetype or claimed_mimetype or filename_mimetype
 
-        resource_format = resource.get('format', '')
+        resource_format: 'str|None' = _cast_to_str(resource.get('format'))
         format_mimetype = mimetypes.guess_type(
-            'example.' + resource_format,
+            'example.{}'.format(resource_format),
             strict=False)[0]
         LOG.debug("Upload format [%s] indicates MIME type %s", resource_format, format_mimetype)
 
@@ -173,11 +191,13 @@ class ResourceTypeValidator:
                 or filename_mimetype in self.archive_mimetypes
 
             try:
-                best_guess_mimetype = resource['mimetype'] = self.coalesce_mime_types(
+                coalesced_type: 'str|None' = self.coalesce_mime_types(
                     [filename_mimetype, format_mimetype, sniffed_mimetype,
                      claimed_mimetype],
                     allow_override=allow_override
                 )
+                resource['mimetype'] = coalesced_type
+                best_guess_mimetype = coalesced_type
             except ValidationError as e:
                 LOG.debug("Best guess at MIME type failed %s - upload type: %s format type: %s sniffed: %s claimed: %s",
                           resource.get('url') or filename,
@@ -190,7 +210,7 @@ class ResourceTypeValidator:
                 {'upload': [self.invalid_upload_message]}
             )
 
-    def coalesce_mime_types(self, mime_types, allow_override=True):
+    def coalesce_mime_types(self, mime_types: 'list[str|None]', allow_override: bool = True) -> 'str|None':
         """ Compares a list of potential mime types and identifies
         the best candidate, ignoring any that are None.
 
@@ -226,7 +246,7 @@ class ResourceTypeValidator:
 
         return best_candidate or 'application/octet-stream'
 
-    def type_equals(self, type1, type2):
+    def type_equals(self, type1: 'str|None', type2: 'str|None') -> bool:
         """ Checks whether type1 and type2 are to be considered the same
         eg 'text/xml' and 'application/xml' are interchangeable.
         """
@@ -238,7 +258,7 @@ class ResourceTypeValidator:
         else:
             return False
 
-    def is_valid_override(self, mime_type1, mime_type2):
+    def is_valid_override(self, mime_type1: 'str|None', mime_type2: 'str|None') -> 'tuple[bool, str|None]':
         """ Returns True if one of the two types can be considered a subtype
         of the other, eg 'text/csv' can override 'text/plain'.
 
@@ -248,15 +268,16 @@ class ResourceTypeValidator:
         if self.type_equals(mime_type1, mime_type2):
             return True, mime_type1
 
-        def matches_override_list(mime_type, override_list):
+        def matches_override_list(mime_type: 'str|None', override_list: 'list[str]'):
             for override_type in override_list:
                 if override_type == '*'\
                         or self.type_equals(override_type, mime_type):
                     return True
-                override_parts = override_type.split('/', 1)
-                if len(override_parts) == 2 and override_parts[1] == '*'\
-                        and override_parts[0] == mime_type.split('/')[0]:
-                    return True
+                if mime_type:
+                    override_parts = override_type.split('/', 1)
+                    if len(override_parts) == 2 and override_parts[1] == '*'\
+                            and override_parts[0] == mime_type.split('/')[0]:
+                        return True
             else:
                 return False
 
@@ -272,7 +293,7 @@ class ResourceTypeValidator:
         else:
             return False, None
 
-    def is_mimetype_allowed(self, mime_type):
+    def is_mimetype_allowed(self, mime_type: 'str|None') -> bool:
         for allowed_mime_type in self.allowed_mime_types:
             if allowed_mime_type == '*'\
                     or self.type_equals(allowed_mime_type, mime_type):

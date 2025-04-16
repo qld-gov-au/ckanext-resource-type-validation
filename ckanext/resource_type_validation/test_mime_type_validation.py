@@ -130,8 +130,7 @@ class TestMimeTypeValidation(unittest.TestCase):
     """
 
     def setUp(self):
-        self.validator = ResourceTypeValidator()
-        self.validator.configure({'ckan.site_url': 'http://ckan:5000/'})
+        self.validator = ResourceTypeValidator({'ckan.site_url': 'http://ckan:5000/'})
 
     def test_equal_types(self):
         """ Test that equal types are treated as interchangeable.
