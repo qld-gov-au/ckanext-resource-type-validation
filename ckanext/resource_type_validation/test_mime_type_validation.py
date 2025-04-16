@@ -130,8 +130,7 @@ class TestMimeTypeValidation(unittest.TestCase):
     """
 
     def setUp(self):
-        self.validator = ResourceTypeValidator()
-        self.validator.configure({'ckan.site_url': 'http://ckan:5000/'})
+        self.validator = ResourceTypeValidator({'ckan.site_url': 'http://ckan:5000/'})
 
     def test_equal_types(self):
         """ Test that equal types are treated as interchangeable.
@@ -262,7 +261,7 @@ class TestMimeTypeValidation(unittest.TestCase):
                 If you continue to have problems, contact the site owner.''')
         )
 
-        self.validator.configure({
+        self.validator = ResourceTypeValidator({
             'ckanext.resource_validation.support_contact':
                 'the Ministry of Silly Walks.'
         })

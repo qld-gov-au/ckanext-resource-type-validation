@@ -1,0 +1,110 @@
+---
+name: Pytest
+on:
+  workflow_call:
+  workflow_dispatch:
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        ckan-version: ['2.11', '2.10', 2.9]
+        experimental: [false]
+        include:
+          - ckan-version: 'master'
+            experimental: true  # master is unstable, good to know if we are compatible or not
+
+    name: ${{ matrix.experimental && '**Fail_Ignored** ' || '' }} CKAN ${{ matrix.ckan-version }}
+    runs-on: ubuntu-latest
+    container: drevops/ci-runner:23.12.0
+    env:
+      CKAN_VERSION: ${{ matrix.ckan-version }}
+      SOLR_VERSION: ${{ matrix.solr-version }}
+
+    steps:
+      # Patch https://github.com/actions/runner/issues/863
+      - name: Preserve $HOME set in the container
+        run: echo HOME=/root >> "$GITHUB_ENV"
+
+      - uses: actions/checkout@v4
+        continue-on-error: ${{ matrix.experimental }}
+        timeout-minutes: 2
+
+      - name: Build
+        run: bin/build.sh
+        timeout-minutes: 15
+        continue-on-error: ${{ matrix.experimental }}
+
+      - name: Test
+        run: bin/test.sh
+        timeout-minutes: 15
+        continue-on-error: ${{ matrix.experimental }}
+
+      - name: Retrieve logs
+        if: always()
+        run: ahoy logs
+        timeout-minutes: 1
+        continue-on-error: ${{ matrix.experimental }}
+
+      - name: Retrieve results
+        if: always()
+        run: bin/process-artifacts.sh
+        timeout-minutes: 1
+        continue-on-error: true #don't fail if we can't upload (ie a fork that does not have integration plugged in)
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: CKAN ${{ matrix.ckan-version }} screenshots
+          path: /tmp/artifacts/behave/screenshots
+        timeout-minutes: 1
+        continue-on-error: true
+
+      - name: Pytest Coverage Console Report
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        run: |
+          set -ex
+          ahoy cli "coverage report -m"
+
+      - name: Upload HTML coverage report
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        with:
+          name: combined-test-coverage-reports-${{ matrix.ckan-version }}
+          path: /tmp/artifacts/results
+
+      - name: Test Summary
+        uses: test-summary/action@v2
+        continue-on-error: true
+        with:
+          paths: "/tmp/artifacts/results/results.xml"
+        if: ${{ !cancelled() }}
+
+      - name: Install packages required for codecov
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        run: |
+          # ubuntu based images
+          apt-get install -y --no-install-recommends curl gpg
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: /tmp/artifacts/results/coverage.xml
+          verbose: false # optional (default = false)
+
+      - name: Upload test results to Codecov
+        uses: codecov/test-results-action@v1
+        if: ${{ !cancelled() }}
+        continue-on-error: true #don't fail if we can't upload (ie a fork that does not have integration plugged in)
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: /tmp/artifacts/results/results.xml
+          verbose: false # optional (default = false)
+

@@ -1,60 +1,27 @@
----
-name: Tests
+name: Test
 on:
   push:
   pull_request:
-    branches:
-      - master
+  workflow_dispatch:
+  workflow_call:
+
+permissions:
+  contents: read
 
 jobs:
-  # Quick check so we don't waste minutes if there's a Flake8 error
-  lint:
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
-      - name: Install requirements
-        run: pip install flake8 pycodestyle
-      - name: Check syntax
-        run: flake8 . --count --show-source --statistics
 
-  test:
-    needs: lint
-    strategy:
-      fail-fast: false
-      matrix:
-        ckan-version: ["2.10", 2.9, 2.9-py2, 2.8]
+  flake8:
+    name: Lint (Flake8)
+    uses: ./.github/workflows/flake8.yml # Call the reusable workflow
+    secrets: inherit
 
-    name: Test on CKAN ${{ matrix.ckan-version }}
-    runs-on: ubuntu-latest
-    container: drevops/ci-builder:23.7.0
-    env:
-      CKAN_VERSION: ${{ matrix.ckan-version }}
+  pyright:
+    name: Lint (PyRight)
+    uses: ./.github/workflows/pyright.yml # Call the reusable workflow
+    secrets: inherit
 
-    steps:
-      - uses: actions/checkout@v3
-        timeout-minutes: 2
-
-      - name: Build
-        run: bin/build.sh
-        timeout-minutes: 15
-
-      - name: Test
-        run: bin/test.sh
-        timeout-minutes: 30
-
-      - name: Retrieve screenshots
-        if: failure()
-        run: bin/process-artifacts.sh
-        timeout-minutes: 1
-
-      - name: Upload screenshots
-        if: failure()
-        uses: actions/upload-artifact@v3
-        with:
-          name: CKAN ${{ matrix.ckan-version }} screenshots
-          path: /tmp/artifacts/behave/screenshots
-        timeout-minutes: 1
+  pytest:
+    name: Test (Pytest)
+    #needs: [flake8]
+    uses: ./.github/workflows/pytest.yml # Call the reusable workflow
+    secrets: inherit

@@ -1,10 +1,18 @@
-behave==1.2.6
-behaving==2.0.0
-Appium-Python-Client<=0.52
-ckanapi==4.3
+behaving==3.1.5
+Appium-Python-Client==2.10.1
+ckanapi==4.7
+ckan
 ckantoolkit>=0.0.4
+coverage==7.7.*
 factory-boy
-flake8==3.8.3
+flake8==6.0.0
+junit2html==31.0.*
 mock
+pytest
+pytest-cov
 pytest-ckan
-splinter>=0.13.0,<0.17
+pytest-html
+requests>=2.32.0 # not directly required, pinned by Snyk to avoid a vulnerability
+selenium<4.10
+urllib3>=2.2.2 # not directly required, pinned by Snyk to avoid a vulnerability
+zipp>=3.19.1 # not directly required, pinned by Snyk to avoid a vulnerability

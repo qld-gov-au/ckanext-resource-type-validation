@@ -1,0 +1,9 @@
+include *requirements*.txt
+include CHANGELOG
+include LICENSE
+include README.md
+include ckanext/resource_type_validation/config_declaration.yaml
+recursive-include ckanext/resource_type_validation/templates *.html
+recursive-include ckanext/resource_type_validation/webassets *.css
+recursive-include ckanext/resource_type_validation/webassets *.yml
+recursive-include ckanext/resource_type_validation/webassets *.js
