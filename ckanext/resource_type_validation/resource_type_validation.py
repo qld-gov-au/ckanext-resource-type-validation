@@ -9,7 +9,6 @@ import magic
 import mimetypes
 import os
 import re
-import six
 import typing
 
 from ckan.lib.uploader import ALLOWED_UPLOAD_TYPES
@@ -60,9 +59,7 @@ class ResourceTypeValidator:
 
         # Add allowed upload types that don't seem to be standard.
         # NB It's more important to match a sniffable type than an RFC type.
-        for extension, mime_type in six.iteritems(
-                file_mime_config.get('extra_mimetypes', {})
-        ):
+        for extension, mime_type in file_mime_config.get('extra_mimetypes', {}).items():
             mimetypes.add_type(mime_type, extension)
 
         allowed_extensions = file_mime_config.get('allowed_extensions', [])
@@ -282,9 +279,7 @@ class ResourceTypeValidator:
             else:
                 return False
 
-        for generic_type, override_list in six.iteritems(
-                self.allowed_overrides
-        ):
+        for generic_type, override_list in self.allowed_overrides.items():
             if self.type_equals(generic_type, mime_type1)\
                     and matches_override_list(mime_type2, override_list):
                 return True, mime_type2
