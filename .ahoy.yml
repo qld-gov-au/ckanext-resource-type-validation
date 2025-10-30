@@ -160,7 +160,7 @@ commands:
       ahoy start-mailmock &
       sleep 5
       JUNIT_OUTPUT="--junit --junit-directory=test/junit/"
-      ahoy cli "behave $JUNIT_OUTPUT -k ${*:-test/features} --tags=-comment-report" || \
+      ahoy cli "behave $JUNIT_OUTPUT --no-skipped ${*:-test/features} --tags=-comment-report" || \
       [ "${ALLOW_BDD_FAIL:-0}" -eq 1 ]
       ahoy stop-mailmock
       ahoy stop-ckan-job-worker
