@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 env:
   NODE_VERSION: '18'
-  PYTHON_VERSION: '3.9'
+  PYTHON_VERSION: '3.10'
 
 permissions:
   contents: read
@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         include: #ckan-image see https://github.com/ckan/ckan-docker-base, ckan-version controls other image tags
-          - ckan-version: "ckan-2.11.4"
+          - ckan-version: "dev-v2.11"
             experimental: false
           - ckan-version: "dev-v2.10"
             experimental: false
