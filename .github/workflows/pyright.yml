@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         include: #ckan-image see https://github.com/ckan/ckan-docker-base, ckan-version controls other image tags
-          - ckan-version: "dev-v2.11"
+          - ckan-version: "ckan-2.11.4"
             experimental: false
           - ckan-version: "dev-v2.10"
             experimental: false
@@ -44,10 +44,10 @@ jobs:
           cache: 'npm'
 
       - name: Install python deps
-        run: | 
+        run: |
           pip list
           pip install -r ckan/requirements.txt -r ckan/dev-requirements.txt ckan/.
-          pip install -r requirements.txt -r dev-requirements.txt -e. 
+          pip install -r requirements.txt -r dev-requirements.txt -e.
 
       - name: Install node deps
         run: npm ci
