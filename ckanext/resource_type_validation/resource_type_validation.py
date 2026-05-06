@@ -14,9 +14,10 @@ import typing
 from ckan.logic import ValidationError
 from ckan.common import CKANConfig
 from ckan.plugins import toolkit
-try:
-    from ckan.lib.uploader import ALLOWED_UPLOAD_TYPES
-except ImportError:
+from ckan.lib import uploader
+if hasattr(uploader, 'ALLOWED_UPLOAD_TYPES'):
+    ALLOWED_UPLOAD_TYPES = uploader.ALLOWED_UPLOAD_TYPES
+else:
     from cgi import FieldStorage
     if toolkit.check_ckan_version(min_version='2.7.0'):
         from werkzeug.datastructures import FileStorage as FlaskFileStorage
