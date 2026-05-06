@@ -15,20 +15,17 @@ from ckan.logic import ValidationError
 from ckan.common import CKANConfig
 from ckan.plugins import toolkit
 from ckan.lib import uploader
-if hasattr(uploader, 'ALLOWED_UPLOAD_TYPES'):
-    ALLOWED_UPLOAD_TYPES = uploader.ALLOWED_UPLOAD_TYPES
-else:
-    from cgi import FieldStorage
-    if toolkit.check_ckan_version(min_version='2.7.0'):
-        from werkzeug.datastructures import FileStorage as FlaskFileStorage
-        if toolkit.check_ckan_version(min_version='2.11'):
-            ALLOWED_UPLOAD_TYPES = (FlaskFileStorage)
-        else:
-            ALLOWED_UPLOAD_TYPES = (FieldStorage, FlaskFileStorage)
-    else:
-        ALLOWED_UPLOAD_TYPES = (FieldStorage)
-
 from werkzeug.datastructures import FileStorage as FlaskFileStorage
+
+upload_types: list = [FlaskFileStorage]
+if hasattr(uploader, 'ALLOWED_UPLOAD_TYPES'):
+    upload_types = uploader.ALLOWED_UPLOAD_TYPES
+else:
+    if toolkit.check_ckan_version(max_version='2.10.0'):
+        from cgi import FieldStorage
+        upload_types.append(FieldStorage)
+
+ALLOWED_UPLOAD_TYPES = tuple(upload_types)
 
 LOG = getLogger(__name__)
 
