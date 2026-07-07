@@ -24,6 +24,7 @@ COPY bin/ckan_cli /usr/bin/
 RUN chmod +x "${APP_DIR}"/bin/*.sh /usr/bin/ckan_cli
 
 RUN (which ps && which wget) || (apt-get update && apt-get install -y procps wget)
+RUN pip install uv pyasyncore standard-smtpd
 
 
 USER "$ORIGINAL_USER"
