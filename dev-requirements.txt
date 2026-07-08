@@ -16,4 +16,4 @@ selenium<4.10
 urllib3>=2.2.2 # not directly required, pinned by Snyk to avoid a vulnerability
 zipp>=3.19.1 # not directly required, pinned by Snyk to avoid a vulnerability
 
-git+https://github.com/qld-gov-au/behaving.git@QOLDEV-2078-ckan-2.12#egg=behaving
+git+https://github.com/qld-gov-au/behaving.git@aff702e#egg=behaving
