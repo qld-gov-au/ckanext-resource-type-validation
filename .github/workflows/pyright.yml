@@ -28,6 +28,9 @@ jobs:
     name: ${{ matrix.experimental && '**Fail_Ignored** ' || '' }} Check types ${{ matrix.ckan-version }}
     runs-on: ubuntu-latest
     steps:
+      - name: checkout plugin
+        uses: actions/checkout@v7
+
       - name: checkout ckan
         uses: actions/checkout@v7
         with:
