@@ -1,11 +1,11 @@
-behaving==3.1.5
+behaving==3.2.1
 Appium-Python-Client==2.10.1
-ckanapi==4.7
+ckanapi>=4.7
 ckan
 ckantoolkit>=0.0.4
 coverage==7.7.*
 factory-boy
-flake8==6.0.0
+flake8==7.3.0
 junit2html==31.0.*
 mock
 pytest

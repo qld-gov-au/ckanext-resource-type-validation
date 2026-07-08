@@ -24,6 +24,19 @@ This affects only uploaded resources. URL resources are not validated.
 See [the configuration file](https://github.com/qld-gov-au/ckanext-resource-type-validation/blob/main/ckanext/resource_type_validation/resources/resource_types.json)
 for more details.
 
+## Requirements
+
+Compatibility with core CKAN versions:
+
+  | CKAN version   | Compatibility |
+  | -------------- |---------------|
+  | 2.7            | no            |
+  | 2.8            | no            |
+  | 2.9            | yes           |
+  | 2.10           | yes           |
+  | 2.11           | yes           |
+  | 2.12           | yes           |
+
 Installation
 ------------
 

@@ -8,7 +8,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ckan-version: ['2.11', '2.10', 2.9]
+        ckan-version: ['2.12', '2.11', '2.10', 2.9]
         experimental: [false]
         include:
           - ckan-version: 'master'
