@@ -1,4 +1,5 @@
 Appium-Python-Client==2.10.1
+behaving==3.3.*
 ckanapi>=4.7
 ckan
 ckantoolkit>=0.0.4
@@ -16,4 +17,3 @@ selenium<4.10
 urllib3>=2.2.2 # not directly required, pinned by Snyk to avoid a vulnerability
 zipp>=3.19.1 # not directly required, pinned by Snyk to avoid a vulnerability
 
-git+https://github.com/qld-gov-au/behaving.git@f9e8d65#egg=behaving
