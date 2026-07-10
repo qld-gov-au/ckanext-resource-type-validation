@@ -8,7 +8,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ckan-version: ['2.11', '2.10', 2.9]
+        ckan-version: ['2.12', '2.11', '2.10', 2.9]
         experimental: [false]
         include:
           - ckan-version: 'master'
@@ -26,7 +26,7 @@ jobs:
       - name: Preserve $HOME set in the container
         run: echo HOME=/root >> "$GITHUB_ENV"
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         continue-on-error: ${{ matrix.experimental }}
         timeout-minutes: 2
 
