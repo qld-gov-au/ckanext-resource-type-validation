@@ -17,10 +17,11 @@ from ckan.plugins import toolkit
 from ckan.lib import uploader
 from werkzeug.datastructures import FileStorage as FlaskFileStorage
 
-upload_types: 'list[typing.Any]' = [FlaskFileStorage]
+upload_types: 'list[typing.Any]' = []
 if hasattr(uploader, 'ALLOWED_UPLOAD_TYPES'):
-    upload_types = getattr(uploader, 'ALLOWED_UPLOAD_TYPES')
+    upload_types.extend(getattr(uploader, 'ALLOWED_UPLOAD_TYPES'))
 else:
+    upload_types.append(FlaskFileStorage)
     if toolkit.check_ckan_version(max_version='2.10.0'):
         from cgi import FieldStorage
         upload_types.append(FieldStorage)
