@@ -11,22 +11,10 @@ import os
 import re
 import typing
 
-from ckan.logic import ValidationError
-from ckan.common import CKANConfig
-from ckan.plugins import toolkit
-from ckan.lib import uploader
+from ckan.plugins.toolkit import CKANConfig, ValidationError
 from werkzeug.datastructures import FileStorage as FlaskFileStorage
 
-upload_types: 'list[typing.Any]' = []
-if hasattr(uploader, 'ALLOWED_UPLOAD_TYPES'):
-    upload_types.extend(getattr(uploader, 'ALLOWED_UPLOAD_TYPES'))
-else:
-    upload_types.append(FlaskFileStorage)
-    if toolkit.check_ckan_version(max_version='2.10.0'):
-        from cgi import FieldStorage
-        upload_types.append(FieldStorage)
-
-ALLOWED_UPLOAD_TYPES: 'tuple[typing.Any]' = tuple(upload_types)
+ALLOWED_UPLOAD_TYPES = (FlaskFileStorage,)
 
 LOG = getLogger(__name__)
 
@@ -223,7 +211,7 @@ class ResourceTypeValidator:
         """ Compares a list of potential mime types and identifies
         the best candidate, ignoring any that are None.
 
-        Throws ckan.logic.ValidationError if any candidates conflict.
+        Throws ckan.plugins.toolkit.ValidationError if any candidates conflict.
         Returns 'application/octet-stream' if all candidates are None.
 
         'allow_override' controls the treatment of 'application/octet-stream'
