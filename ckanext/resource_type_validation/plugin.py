@@ -3,7 +3,7 @@
 from typing import Any
 
 from ckan import plugins
-from ckan.common import CKANConfig
+from ckan.plugins.toolkit import CKANConfig
 
 from .resource_type_validation import ResourceTypeValidator
 
