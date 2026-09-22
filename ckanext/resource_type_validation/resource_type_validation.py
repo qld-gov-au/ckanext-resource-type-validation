@@ -11,14 +11,10 @@ import os
 import re
 import typing
 
-from ckan.plugins.toolkit import check_ckan_version, CKANConfig, ValidationError
+from ckan.plugins.toolkit import CKANConfig, ValidationError
 from werkzeug.datastructures import FileStorage as FlaskFileStorage
 
-upload_types = [FlaskFileStorage]
-if check_ckan_version(max_version='2.10.0'):
-    from cgi import FieldStorage
-    upload_types.append(FieldStorage)
-ALLOWED_UPLOAD_TYPES: 'tuple[typing.Any]|tuple[typing.Any, typing.Any]' = tuple(upload_types)
+ALLOWED_UPLOAD_TYPES = (FlaskFileStorage,)
 
 LOG = getLogger(__name__)
 
