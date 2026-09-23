@@ -11,16 +11,16 @@ jobs:
           fetch-tags: true
       - name: Check that version is updated since latest tag
         run: |
-          VERSION_REGEX=".*version *= *[\"']\([^'\"]\+\)['\"].*"
+          VERSION_REGEX="^\s*version\s*=\s*[\"']\([^'\"]\+\)['\"].*"
           if [ -e pyproject.toml ]; then
-            CURRENT_VERSION=$(sed -n "s|$VERSION_REGEX|\1|p" pyproject.toml)
+            CURRENT_VERSION=$(sed -n "s|$VERSION_REGEX|\1|p; /$VERSION_REGEX/q" pyproject.toml)
           elif [ -e setup.py ]; then
-            CURRENT_VERSION=$(sed -n "s|$VERSION_REGEX|\1|p" setup.py)
+            CURRENT_VERSION=$(sed -n "s|$VERSION_REGEX|\1|p; /$VERSION_REGEX/q" setup.py)
           fi
           if [ "$CURRENT_VERSION" = "" ]; then
             echo "Unable to find current version in project config"
             exit 1
-          elif (git describe --tags "$CURRENT_VERSION"); then
+          elif (git tag -l |grep -E "^v?$CURRENT_VERSION$"); then
             echo "Version $CURRENT_VERSION has been tagged, update version when making changes"
             exit 1
           fi
