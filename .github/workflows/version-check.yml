@@ -24,4 +24,3 @@ jobs:
             echo "Version $CURRENT_VERSION has been tagged, update version when making changes"
             exit 1
           fi
-
