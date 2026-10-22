@@ -2,6 +2,9 @@ name: Version check
 
 on: pull_request
 
+permissions:
+  contents: read
+
 jobs:
   version_update_check:
     runs-on: ubuntu-latest
@@ -20,7 +23,7 @@ jobs:
           if [ "$CURRENT_VERSION" = "" ]; then
             echo "Unable to find current version in project config"
             exit 1
-          elif (git tag -l |grep -E "^v?$CURRENT_VERSION$"); then
+          elif (git tag -l |grep -Fx -e "$CURRENT_VERSION" -e "v$CURRENT_VERSION"); then
             echo "Version $CURRENT_VERSION has been tagged, update version when making changes"
             exit 1
           fi
