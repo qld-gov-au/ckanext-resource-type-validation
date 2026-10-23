@@ -32,7 +32,7 @@ Compatibility with core CKAN versions:
   | -------------- |---------------|
   | 2.7            | no            |
   | 2.8            | no            |
-  | 2.9            | yes           |
+  | 2.9            | no            |
   | 2.10           | yes           |
   | 2.11           | yes           |
   | 2.12           | yes           |
@@ -42,7 +42,7 @@ Installation
 
 To install ``ckanext-resource-type-validation``:
 
-1. Install CKAN 2.9+.
+1. Install CKAN 2.10+.
 
 1. Activate your CKAN virtual environment, eg:
 
