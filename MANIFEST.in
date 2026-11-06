@@ -3,6 +3,7 @@ include CHANGELOG
 include LICENSE
 include README.md
 include ckanext/resource_type_validation/config_declaration.yaml
+include ckanext/resource_type_validation/resources/resource_types.json
 recursive-include ckanext/resource_type_validation/templates *.html
 recursive-include ckanext/resource_type_validation/webassets *.css
 recursive-include ckanext/resource_type_validation/webassets *.yml
